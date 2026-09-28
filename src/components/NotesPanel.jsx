@@ -1,14 +1,14 @@
-export default function NotesPanel({ variant }) {
+export default function NotesPanel({ variant, total }) {
   return (
     <aside className="notes">
       <div className="notes-kicker">
-        {variant.no} <span>/ 05</span>
+        {variant.no} <span>/ {String(total).padStart(2, '0')}</span>
       </div>
       <h2 className="notes-title">{variant.name}</h2>
       <p className="notes-line">{variant.line}</p>
 
-      <div className="conditions">
-        <div className="side-label">이번 단계에서 추가된 조건</div>
+      <div className={`conditions${variant.final ? ' final' : ''}`}>
+        <div className="side-label">{variant.conditionsTitle ?? '이번 단계에서 추가된 조건'}</div>
         {variant.conditions.length ? (
           <ul>
             {variant.conditions.map((c) => (

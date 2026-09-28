@@ -108,7 +108,7 @@ export default function App() {
             ←
           </button>
           <span className="stepper-count">
-            <b>{current.no}</b> / 0{count}
+            <b>{current.no}</b> / {String(count).padStart(2, '0')}
           </span>
           <button onClick={() => setIndex((index + 1) % count)} aria-label="다음 단계">
             →
@@ -137,7 +137,7 @@ export default function App() {
           </div>
         </section>
 
-        <NotesPanel variant={current} />
+        <NotesPanel variant={current} total={count} />
       </main>
     </div>
   );

@@ -138,3 +138,21 @@ kbd {
 .points ol { margin: 0; padding: 0; list-style: none; counter-reset: p; }
 .points li { position: relative; padding: 8px 0 8px 22px; border-top: 1px solid var(--line); font-size: 14px; line-height: 1.45; color: #3A3E45; }
 .points li::before { counter-increment: p; content: counter(p); position: absolute; top: 8px; left: 0; font-size: 12px; font-weight: 800; color: var(--faint); }
+
+/* 최종안: 과하지 않게, 앞 5단계와 구분선 하나 + 작은 태그로만 구분 */
+.state-tab.final { position: relative; margin-top: 13px; }
+.state-tab.final::before {
+  content: '';
+  position: absolute; top: -8px; left: 12px; right: 12px;
+  border-top: 1px dashed var(--line);
+}
+.state-tag {
+  margin-left: auto;
+  padding: 1px 7px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 11px; font-weight: 600;
+  color: var(--muted);
+}
+.state-tab.active .state-tag { border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.75); }
+.conditions.final li::before { content: '✓'; font-size: 12px; }
