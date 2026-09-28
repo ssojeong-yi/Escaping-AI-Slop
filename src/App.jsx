@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { variants } from './data/variants.js';
 import { screens } from './screens/index.js';
 import StateTabs from './components/StateTabs.jsx';
@@ -17,6 +17,52 @@ export default function App() {
   const shown = peeking ? baseline : current;
   const Screen = screens[shown.id];
 
+  // 기본안 비교(peek) 중에도 스크롤 위치를 유지한다.
+  // 들어갈 때는 같은 비율 지점으로, 나올 때는 원래 픽셀 위치로 되돌린다.
+  const stageRef = useRef(null);
+  const peekRef = useRef(false);
+  const currentIdRef = useRef(current.id);
+  currentIdRef.current = current.id;
+  const scrollMemo = useRef(null); // { mode: 'enter' | 'leave', top, ratio }
+  const getBody = () => stageRef.current?.querySelector('.screen-body');
+
+  const startPeek = useCallback(() => {
+    if (peekRef.current) return; // 키 반복 입력 무시
+    peekRef.current = true;
+    const body = getBody();
+    // 기본안 단계에서는 화면이 바뀌지 않으므로 기억할 것이 없다.
+    if (body && currentIdRef.current !== baseline.id) {
+      const max = body.scrollHeight - body.clientHeight;
+      scrollMemo.current = { mode: 'enter', top: body.scrollTop, ratio: max > 0 ? body.scrollTop / max : 0 };
+    }
+    setPeek(true);
+  }, []);
+
+  const endPeek = useCallback(() => {
+    if (!peekRef.current) return;
+    peekRef.current = false;
+    if (scrollMemo.current) scrollMemo.current.mode = 'leave';
+    setPeek(false);
+  }, []);
+
+  useLayoutEffect(() => {
+    const memo = scrollMemo.current;
+    const body = getBody();
+    if (!memo || !body) return;
+    if (memo.mode === 'enter') {
+      body.scrollTop = memo.ratio * (body.scrollHeight - body.clientHeight);
+    } else {
+      body.scrollTop = memo.top;
+      scrollMemo.current = null;
+    }
+  }, [shown.id]);
+
+  // 단계를 바꾸면 새 화면은 맨 위에서 시작한다 (비교 중에 바꿨다면 떼는 순간 맨 위).
+  useEffect(() => {
+    if (peekRef.current && scrollMemo.current) scrollMemo.current.top = 0;
+    else if (!peekRef.current) scrollMemo.current = null;
+  }, [index]);
+
   useEffect(() => {
     const onKeyDown = (e) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -30,16 +76,16 @@ export default function App() {
         setIndex((i) => (i - 1 + count) % count);
       } else if (e.code === 'Space') {
         e.preventDefault();
-        setPeek(true);
+        startPeek();
       }
     };
     const onKeyUp = (e) => {
       if (e.code === 'Space') {
         e.preventDefault();
-        setPeek(false);
+        endPeek();
       }
     };
-    const reset = () => setPeek(false);
+    const reset = endPeek;
     window.addEventListener('keydown', onKeyDown);
     window.addEventListener('keyup', onKeyUp);
     window.addEventListener('blur', reset);
@@ -48,7 +94,7 @@ export default function App() {
       window.removeEventListener('keyup', onKeyUp);
       window.removeEventListener('blur', reset);
     };
-  }, []);
+  }, [startPeek, endPeek]);
 
   return (
     <div className="app">
@@ -73,7 +119,7 @@ export default function App() {
       <main className="main">
         <StateTabs variants={variants} activeIndex={index} onSelect={setIndex} />
 
-        <section className="stage">
+        <section className="stage" ref={stageRef}>
           <PhoneFrame>
             <Screen key={shown.id} />
           </PhoneFrame>
@@ -82,9 +128,9 @@ export default function App() {
             <button
               className={`peek-btn${peeking ? ' on' : ''}`}
               disabled={current.id === baseline.id}
-              onPointerDown={() => setPeek(true)}
-              onPointerUp={() => setPeek(false)}
-              onPointerLeave={() => setPeek(false)}
+              onPointerDown={startPeek}
+              onPointerUp={endPeek}
+              onPointerLeave={endPeek}
             >
               {peeking ? '기본안 보는 중 · 떼면 돌아갑니다' : '누르고 있으면 기본안과 비교'}
             </button>
