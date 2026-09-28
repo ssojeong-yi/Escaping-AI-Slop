@@ -1,0 +1,49 @@
+.mc { background: #fff; color: #17191C; --tab-active: #17191C; --tab-idle: #B0B4BA; }
+.mc .tabbar { border-top: 1px solid #EFF0F2; }
+
+.mc-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 24px; font-size: 17px; font-weight: 700; }
+
+.mc-total { padding: 28px 24px 28px; }
+.mc-label { font-size: 14px; color: #6F737A; }
+.mc-amount { margin-top: 6px; font-size: 34px; font-weight: 700; letter-spacing: -1px; }
+.mc-change { margin-top: 6px; font-size: 13.5px; color: #6F737A; }
+.mc-change b { color: #1B64DA; font-weight: 600; }
+.mc-actions { display: flex; gap: 8px; margin-top: 22px; }
+.mc-btn {
+  flex: 1; height: 46px;
+  border: 1px solid #DADCE0; border-radius: 10px;
+  background: #fff; color: #17191C;
+  font-size: 15px; font-weight: 600;
+}
+.mc-btn.solid { border-color: #17191C; background: #17191C; color: #fff; }
+
+.mc-sec { padding: 24px 24px 10px; border-top: 1px solid #ECEDEF; }
+.mc-sec-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
+.mc-sec-head h3 { font-size: 16px; font-weight: 700; }
+.mc-count { margin-left: 6px; color: #9A9EA5; font-weight: 500; }
+.mc-link { font-size: 13px; color: #8A8F96; }
+
+.mc-row { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid #F2F3F4; }
+.mc-row:last-child { border-bottom: 0; }
+.mc-row-icon { flex: none; color: #9A9EA5; }
+.mc-row-main { flex: 1; min-width: 0; }
+.mc-row-title { font-size: 15px; font-weight: 500; }
+.mc-row-sub { margin-top: 3px; font-size: 12.5px; color: #8A8F96; }
+.mc-row-amt { font-size: 15px; font-weight: 600; white-space: nowrap; }
+.mc-row-amt.plus { color: #1B64DA; }
+
+.mc-people { display: flex; gap: 18px; padding: 12px 0 14px; }
+.mc-person { display: flex; flex-direction: column; align-items: center; gap: 7px; font-size: 12.5px; color: #4B4F55; }
+.mc-avatar {
+  display: grid; place-items: center;
+  width: 46px; height: 46px; border: 1px solid #E1E3E6; border-radius: 50%;
+  font-size: 16px; font-weight: 600; color: #17191C;
+}
+
+.mc-card-amt { margin-top: 8px; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+.mc-bar { height: 2px; margin: 16px 0 10px; background: #ECEDEF; }
+.mc-bar span { display: block; height: 100%; background: #17191C; }
+.mc-meta { display: flex; justify-content: space-between; padding-bottom: 14px; font-size: 13px; color: #8A8F96; }
+
+.mc-date { padding: 16px 0 0; font-size: 12.5px; font-weight: 600; color: #8A8F96; }
+.mc-sec:last-child { padding-bottom: 24px; }

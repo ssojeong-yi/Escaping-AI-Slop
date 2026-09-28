@@ -1,0 +1,45 @@
+.ty { background: #FAF9F6; color: #111; --tab-active: #111; --tab-idle: #9A958B; }
+.ty .tabbar { margin: 0 20px; padding-left: 0; padding-right: 0; border-top: 1px solid #111; background: #FAF9F6; }
+.ty .tabbar-item.active { font-weight: 800; }
+
+.ty-head { display: flex; align-items: baseline; justify-content: space-between; padding: 10px 24px 0; }
+.ty-brand { font-size: 15px; font-weight: 800; letter-spacing: -0.4px; }
+.ty-head-meta { font-size: 13px; color: #77736B; }
+
+.ty-greet { margin: 0; padding: 30px 24px 0; font-size: 27px; font-weight: 800; line-height: 1.28; letter-spacing: -1px; }
+.ty-greet span { color: #A39E94; font-weight: 500; }
+
+.ty-total { padding: 40px 24px 36px; }
+.ty-kicker { font-size: 13px; font-weight: 700; color: #111; }
+.ty-total-num { margin-top: 10px; font-size: 52px; font-weight: 200; line-height: 1; letter-spacing: -2.5px; }
+.ty-total-num span { margin-left: 4px; font-size: 20px; font-weight: 500; letter-spacing: 0; }
+.ty-total-sub { margin-top: 16px !important; font-size: 14px; color: #57534C; }
+.ty-total-sub b { color: #111; font-weight: 700; }
+
+.ty-sec { margin: 0 24px; padding: 14px 0 32px; border-top: 2px solid #111; }
+.ty-sec-title { display: flex; align-items: baseline; justify-content: space-between; font-size: 14px; font-weight: 800; }
+.ty-sec-title em { margin-right: 8px; font-style: normal; font-weight: 400; color: #A39E94; }
+.ty-aside { font-size: 12.5px; font-weight: 400; color: #77736B; }
+
+.ty-acc { display: flex; align-items: baseline; justify-content: space-between; padding: 16px 0 14px; border-bottom: 1px solid #E4E1DA; }
+.ty-acc:last-child { border-bottom: 0; }
+.ty-acc-name { font-size: 17px; font-weight: 600; }
+.ty-acc-no { margin-top: 3px; font-size: 12.5px; color: #8F8A80; }
+.ty-acc-amt { font-size: 18px; font-weight: 400; letter-spacing: -0.3px; }
+
+.ty-send { display: flex; align-items: baseline; justify-content: space-between; padding: 16px 0 8px; font-size: 32px; font-weight: 800; letter-spacing: -1.2px; }
+.ty-send span { font-weight: 200; }
+.ty-send-recent { font-size: 14px; line-height: 1.6; color: #57534C; }
+
+.ty-card-num { margin-top: 16px; font-size: 40px; font-weight: 200; line-height: 1; letter-spacing: -1.6px; }
+.ty-card-num span { margin-left: 3px; font-size: 17px; font-weight: 500; letter-spacing: 0; }
+.ty-card-lines { margin-top: 14px !important; font-size: 14px; line-height: 1.75; color: #57534C; }
+.ty-card-lines b { color: #111; font-weight: 700; }
+
+.ty-day { padding: 18px 0 4px; font-size: 13px; font-weight: 800; }
+.ty-day span { margin-left: 4px; font-weight: 400; color: #A39E94; }
+.ty-tx { display: flex; align-items: baseline; justify-content: space-between; padding: 8px 0; font-size: 15.5px; }
+.ty-tx-name small { margin-left: 8px; font-size: 12.5px; color: #A39E94; }
+.ty-tx-amt { font-weight: 400; color: #57534C; }
+.ty-tx.in .ty-tx-name { font-weight: 700; }
+.ty-tx.in .ty-tx-amt { font-weight: 800; color: #111; }

@@ -1,0 +1,50 @@
+.nh { background: #F1F2F4; color: #15181D; --tab-active: #15181D; --tab-idle: #A3A8B0; }
+.nh .tabbar { background: #F1F2F4; }
+
+.nh-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 20px 16px; }
+.nh-date { font-size: 12.5px; color: #6B7280; }
+.nh-title { margin-top: 2px; font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+.nh-head-btns { display: flex; gap: 8px; }
+.nh-head-btns span {
+  display: grid; place-items: center;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #fff; color: #3B4048;
+}
+
+.nh-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px; }
+.nh-tile {
+  display: flex; flex-direction: column;
+  min-height: 118px; padding: 14px;
+  border-radius: 16px; background: #fff;
+}
+.nh-tile-label {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 12.5px; font-weight: 600; color: #6B7280;
+}
+.nh-tile-label svg { color: #A3A8B0; }
+.nh-tile-value { margin-top: auto; font-size: 19px; font-weight: 700; letter-spacing: -0.5px; }
+.nh-tile-value span { margin-left: 1px; font-size: 14px; font-weight: 600; }
+.nh-tile-sub { margin-top: 4px; font-size: 11.5px; color: #8A9099; }
+.nh-minibar { height: 4px; margin-top: 8px; overflow: hidden; border-radius: 2px; background: #EDEEF1; }
+.nh-minibar span { display: block; height: 100%; background: #15181D; }
+.nh-send-names { margin-top: auto; font-size: 13.5px; font-weight: 600; line-height: 1.35; }
+.nh-send-btn {
+  height: 32px; margin-top: 10px;
+  border: 0; border-radius: 9px;
+  background: #2457E6; color: #fff;
+  font-size: 13.5px; font-weight: 700;
+}
+
+.nh-mod { margin: 8px 16px 0; padding: 4px 16px 6px; border-radius: 16px; background: #fff; }
+.nh-mod-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 12px 0 6px; font-size: 14.5px; font-weight: 700;
+}
+.nh-mod-head span { font-size: 12.5px; font-weight: 500; color: #8A9099; }
+.nh-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 0; border-top: 1px solid #F1F2F4; }
+.nh-row-title { font-size: 14.5px; font-weight: 500; }
+.nh-row-sub { margin-top: 2px; font-size: 12px; color: #8A9099; }
+.nh-row-amt { font-size: 14.5px; font-weight: 600; white-space: nowrap; }
+.nh-row-amt.plus { color: #2457E6; }
+
+.nh-end { height: 16px; }

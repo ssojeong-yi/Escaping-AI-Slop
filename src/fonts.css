@@ -1,0 +1,8 @@
+/* Pretendard 가변 폰트 한 파일로 모든 굵기를 처리한다 (오프라인에서도 동작). */
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: block;
+  src: url('../node_modules/pretendard/dist/web/variable/woff2/PretendardVariable.woff2') format('woff2-variations');
+}
