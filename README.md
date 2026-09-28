@@ -4,7 +4,7 @@ AI가 만든 비슷한 화면에서 벗어나기 — 같은 금융 정보를 5�
 
 ## 발표 PC에서 여는 방법 (Node 불필요)
 
-`발표용-금융앱UI.html` 파일을 Chrome이나 Safari로 더블클릭해서 엽니다.
+`Escaping-AI-Slop.html` 파일을 Chrome이나 Safari로 더블클릭해서 엽니다.
 JS·CSS·폰트가 모두 파일 안에 들어 있어 인터넷 없이 동작합니다.
 브라우저 창은 전체 화면(Chrome: `⌃⌘F`)으로 두는 것을 권장합니다.
 
