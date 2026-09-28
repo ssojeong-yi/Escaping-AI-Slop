@@ -38,10 +38,6 @@ export default function App() {
       [v.id]: { ...result, previous: prev?.schema ?? null, count: (prev?.count ?? 0) + 1 },
     }));
   };
-  const resetToOriginal = () => {
-    requestRef.current++;
-    setGenerated(({ [current.id]: _, ...rest }) => rest);
-  };
   const regenerateRef = useRef(regenerate);
   regenerateRef.current = regenerate;
 
@@ -157,11 +153,6 @@ export default function App() {
             <button className="regen-btn" onClick={regenerate} disabled={peeking}>
               <span aria-hidden="true">↻</span> 다시 생성 <kbd>R</kbd>
             </button>
-            {generated[current.id] && (
-              <button className="ghost-btn" onClick={resetToOriginal} disabled={peeking}>
-                원본
-              </button>
-            )}
             {/* 버튼을 교체하지 않고 라벨만 바꿔야 pointerup이 같은 요소에서 잡힌다 */}
             <button
               className={`peek-btn${peeking ? ' on' : ''}`}
