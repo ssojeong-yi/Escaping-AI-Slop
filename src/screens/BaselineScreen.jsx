@@ -2,29 +2,9 @@ import Shell, { TabBar } from './Shell.jsx';
 import Icon from '../components/Icon.jsx';
 import { user, accounts, totalAssets, assetChange, card, transfer, transactions } from '../data/finance.js';
 import { won, signed, pct } from '../lib/format.js';
+import RoundIcon from './RoundIcon.jsx';
+import { avatarTones, quickActions } from './tones.js';
 import './baseline.css';
-
-const tones = {
-  wallet: ['#EAF1FF', '#2A62F0'],
-  layers: ['#FFF3E0', '#EE8A00'],
-  trend: ['#E6F7EE', '#12A05C'],
-  coffee: ['#F5EDE6', '#8A5A33'],
-  transfer: ['#EAF1FF', '#2A62F0'],
-  bag: ['#FDECEF', '#E0445E'],
-  home: ['#EEF0F3', '#4E5968'],
-  store: ['#E9F7F5', '#0E9F8E'],
-  won: ['#EAF1FF', '#2A62F0'],
-};
-const avatarTones = [['#FFE8E8', '#E0445E'], ['#E6F7EE', '#12A05C'], ['#F1EDFF', '#6B4EE6']];
-
-function RoundIcon({ name }) {
-  const [bg, fg] = tones[name];
-  return (
-    <span className="bl-row-icon" style={{ background: bg, color: fg }}>
-      <Icon name={name} size={19} stroke={2} />
-    </span>
-  );
-}
 
 export default function BaselineScreen() {
   const usage = Number(pct(card.spent, card.limit, 0));
@@ -61,12 +41,7 @@ export default function BaselineScreen() {
       </section>
 
       <section className="bl-card bl-quick">
-        {[
-          ['send', '송금'],
-          ['qr', 'QR 결제'],
-          ['card', '카드'],
-          ['trend', '투자'],
-        ].map(([icon, label]) => (
+        {quickActions.map(([icon, label]) => (
           <span key={label} className="bl-quick-item">
             <span className="bl-quick-icon">
               <Icon name={icon} size={22} stroke={2} />

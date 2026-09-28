@@ -14,14 +14,14 @@
 
 .bl-hero {
   margin: 0 16px;
-  padding: 22px 20px 18px;
-  border-radius: 24px;
+  padding: 26px 22px 20px;
+  border-radius: 26px;
   background: linear-gradient(135deg, #3A74FF 0%, #1D47C9 100%);
   color: #fff;
   box-shadow: 0 14px 28px -14px rgba(29, 71, 201, 0.7);
 }
 .bl-hero-top { display: flex; align-items: center; gap: 6px; font-size: 14px; opacity: 0.85; }
-.bl-hero-amount { margin-top: 8px; font-size: 32px; font-weight: 800; letter-spacing: -0.8px; }
+.bl-hero-amount { margin-top: 10px; font-size: 36px; font-weight: 800; letter-spacing: -0.8px; }
 .bl-hero-amount small { margin-left: 2px; font-size: 22px; font-weight: 700; }
 .bl-hero-change {
   display: inline-block;
@@ -59,7 +59,6 @@
 }
 
 .bl-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; }
-.bl-row-icon { display: grid; flex: none; place-items: center; width: 40px; height: 40px; border-radius: 50%; }
 .bl-row-main { flex: 1; min-width: 0; }
 .bl-row-title { font-size: 15px; font-weight: 600; }
 .bl-row-sub { margin-top: 2px; font-size: 12.5px; color: #8B95A1; }

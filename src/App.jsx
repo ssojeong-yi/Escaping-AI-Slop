@@ -13,7 +13,8 @@ export default function App() {
   const [peek, setPeek] = useState(false); // Space를 누르고 있는 동안 기본안 표시
 
   const current = variants[index];
-  const shown = peek ? baseline : current;
+  const peeking = peek && current.id !== baseline.id;
+  const shown = peeking ? baseline : current;
   const Screen = screens[shown.id];
 
   useEffect(() => {
@@ -53,17 +54,17 @@ export default function App() {
     <div className="app">
       <header className="topbar">
         <div className="brand">
-          <strong>금융앱 UI 제약 실험</strong>
-          <span>같은 정보 · 다른 디자인 제약 · 5가지 결과 비교</span>
+          <h1>Escaping AI Slop</h1>
+          <span>AI가 만든 비슷한 화면에서 벗어나기</span>
         </div>
         <div className="stepper">
-          <button onClick={() => setIndex((index - 1 + count) % count)} aria-label="이전 상태">
+          <button onClick={() => setIndex((index - 1 + count) % count)} aria-label="이전 단계">
             ←
           </button>
           <span className="stepper-count">
             <b>{current.no}</b> / 0{count}
           </span>
-          <button onClick={() => setIndex((index + 1) % count)} aria-label="다음 상태">
+          <button onClick={() => setIndex((index + 1) % count)} aria-label="다음 단계">
             →
           </button>
         </div>
@@ -73,27 +74,24 @@ export default function App() {
         <StateTabs variants={variants} activeIndex={index} onSelect={setIndex} />
 
         <section className="stage">
-          <div className={`stage-tag${peek && current.id !== baseline.id ? ' peek' : ''}`}>
-            {peek && current.id !== baseline.id ? '기본안 보는 중 — Space를 떼면 돌아갑니다' : `${shown.no} ${shown.name}`}
-          </div>
           <PhoneFrame>
             <Screen key={shown.id} />
           </PhoneFrame>
-          <div className="stage-actions">
+          <div className="stage-foot">
+            {/* 버튼을 교체하지 않고 라벨만 바꿔야 pointerup이 같은 요소에서 잡힌다 */}
             <button
-              className="peek-btn"
+              className={`peek-btn${peeking ? ' on' : ''}`}
               disabled={current.id === baseline.id}
               onPointerDown={() => setPeek(true)}
               onPointerUp={() => setPeek(false)}
               onPointerLeave={() => setPeek(false)}
             >
-              누르고 있으면 기본안과 비교
+              {peeking ? '기본안 보는 중 · 떼면 돌아갑니다' : '누르고 있으면 기본안과 비교'}
             </button>
-            <span className="stage-hint">화면 안에서 스크롤할 수 있습니다</span>
           </div>
         </section>
 
-        <NotesPanel variant={current} baseline={baseline} />
+        <NotesPanel variant={current} />
       </main>
     </div>
   );

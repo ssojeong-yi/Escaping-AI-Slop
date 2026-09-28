@@ -54,7 +54,6 @@ export default function Shell({ className, nav, children }) {
       <StatusBar />
       <div className="screen-body">{children}</div>
       {nav}
-      <span className="home-ind" />
     </div>
   );
 }

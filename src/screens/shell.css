@@ -26,11 +26,11 @@
 /* status bar */
 .sb {
   flex: none;
-  height: 52px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 28px 0 40px;
+  padding: 4px 26px 0 32px;
   font-size: 16px;
   font-weight: 600;
 }
@@ -41,7 +41,7 @@
   flex: none;
   display: flex;
   justify-content: space-around;
-  padding: 8px 10px 30px;
+  padding: 8px 10px 22px;
 }
 .tabbar-item {
   display: flex;
@@ -57,13 +57,5 @@
 .tabbar-text { padding-top: 12px; }
 .tabbar-text .tabbar-item { font-size: 13px; }
 
-.home-ind {
-  position: absolute;
-  left: 50%;
-  bottom: 8px;
-  width: 134px;
-  height: 5px;
-  border-radius: 3px;
-  background: #111;
-  transform: translateX(-50%);
-}
+
+.round-icon { display: grid; flex: none; place-items: center; width: 40px; height: 40px; border-radius: 50%; }
