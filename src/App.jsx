@@ -4,6 +4,8 @@ import { screens } from './screens/index.js';
 import StateTabs from './components/StateTabs.jsx';
 import PhoneFrame from './components/PhoneFrame.jsx';
 import NotesPanel from './components/NotesPanel.jsx';
+import SchemaScreen from './screens/generated/SchemaScreen.jsx';
+import { generateLayout } from './services/layoutService.js';
 
 const count = variants.length;
 const baseline = variants[0];
@@ -15,7 +17,33 @@ export default function App() {
   const current = variants[index];
   const peeking = peek && current.id !== baseline.id;
   const shown = peeking ? baseline : current;
+
+  // 단계별 생성 결과. 없으면 원본(직접 디자인한) 화면을 보여준다.
+  // { [variantId]: { schema, previous, attempts, rejected, count } }
+  const [generated, setGenerated] = useState({});
+  const shownGen = generated[shown.id];
+  const screenKey = `${shown.id}:${shownGen ? shownGen.schema.id : 'original'}`;
   const Screen = screens[shown.id];
+
+  const requestRef = useRef(0);
+  const regenerate = async () => {
+    if (peekRef.current) return;
+    const v = current;
+    const prev = generated[v.id];
+    const requestId = ++requestRef.current;
+    const result = await generateLayout(v.modeKey, { previous: prev?.schema ?? null });
+    if (requestId !== requestRef.current) return; // 그사이 다른 요청이 있었으면 버린다
+    setGenerated((g) => ({
+      ...g,
+      [v.id]: { ...result, previous: prev?.schema ?? null, count: (prev?.count ?? 0) + 1 },
+    }));
+  };
+  const resetToOriginal = () => {
+    requestRef.current++;
+    setGenerated(({ [current.id]: _, ...rest }) => rest);
+  };
+  const regenerateRef = useRef(regenerate);
+  regenerateRef.current = regenerate;
 
   // 기본안 비교(peek) 중에도 스크롤 위치를 유지한다.
   // 들어갈 때는 같은 비율 지점으로, 나올 때는 원래 픽셀 위치로 되돌린다.
@@ -55,7 +83,7 @@ export default function App() {
       body.scrollTop = memo.top;
       scrollMemo.current = null;
     }
-  }, [shown.id]);
+  }, [screenKey]);
 
   // 단계를 바꾸면 새 화면은 맨 위에서 시작한다 (비교 중에 바꿨다면 떼는 순간 맨 위).
   useEffect(() => {
@@ -74,6 +102,8 @@ export default function App() {
       } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
         e.preventDefault();
         setIndex((i) => (i - 1 + count) % count);
+      } else if ((e.key === 'r' || e.key === 'R' || e.key === 'ㄱ') && !e.repeat) {
+        regenerateRef.current();
       } else if (e.code === 'Space') {
         e.preventDefault();
         startPeek();
@@ -121,9 +151,17 @@ export default function App() {
 
         <section className="stage" ref={stageRef}>
           <PhoneFrame>
-            <Screen key={shown.id} />
+            {shownGen ? <SchemaScreen key={screenKey} schema={shownGen.schema} /> : <Screen key={screenKey} />}
           </PhoneFrame>
           <div className="stage-foot">
+            <button className="regen-btn" onClick={regenerate} disabled={peeking}>
+              <span aria-hidden="true">↻</span> 다시 생성 <kbd>R</kbd>
+            </button>
+            {generated[current.id] && (
+              <button className="ghost-btn" onClick={resetToOriginal} disabled={peeking}>
+                원본
+              </button>
+            )}
             {/* 버튼을 교체하지 않고 라벨만 바꿔야 pointerup이 같은 요소에서 잡힌다 */}
             <button
               className={`peek-btn${peeking ? ' on' : ''}`}
@@ -137,7 +175,7 @@ export default function App() {
           </div>
         </section>
 
-        <NotesPanel variant={current} total={count} />
+        <NotesPanel variant={current} total={count} generation={generated[current.id]} />
       </main>
     </div>
   );

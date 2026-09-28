@@ -156,3 +156,41 @@ kbd {
 }
 .state-tab.active .state-tag { border-color: rgba(255, 255, 255, 0.3); color: rgba(255, 255, 255, 0.75); }
 .conditions.final li::before { content: '✓'; font-size: 12px; }
+
+/* 다시 생성 */
+.stage-foot { gap: 8px; }
+.regen-btn {
+  display: flex; align-items: center; gap: 7px;
+  height: 32px; padding: 0 12px 0 14px;
+  border: 1px solid var(--ink); border-radius: 8px;
+  background: var(--ink); color: #fff;
+  font-size: 13px; font-weight: 700;
+}
+.regen-btn span { font-size: 15px; }
+.regen-btn kbd { border-color: rgba(255, 255, 255, 0.3); background: transparent; color: rgba(255, 255, 255, 0.75); }
+.regen-btn:hover:not(:disabled) { background: #000; }
+.regen-btn:disabled, .ghost-btn:disabled { cursor: default; opacity: 0.4; }
+.ghost-btn {
+  height: 32px; padding: 0 12px;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: #fff;
+  font-size: 12.5px; font-weight: 600; color: var(--muted);
+}
+.ghost-btn:hover:not(:disabled) { border-color: var(--ink); color: var(--ink); }
+
+.gen-info { margin-top: 24px; }
+.gen-head { display: flex; align-items: baseline; justify-content: space-between; }
+.gen-seed { font-size: 11.5px; color: var(--faint); font-variant-numeric: tabular-nums; }
+.gen-retry { margin: -4px 0 10px; font-size: 12.5px; color: #9A6B00; }
+.gen-rules { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; padding: 0; list-style: none; }
+.gen-rules li { padding: 3px 8px; border: 1px solid #CFE3D9; border-radius: 6px; background: #F1F8F4; font-size: 12px; font-weight: 600; color: #1E6B4B; }
+.gen-rules li::before { content: '✓ '; }
+.gen-rules li.fail { border-color: #F0C7C7; background: #FDF1F1; color: #B42318; }
+.gen-rules li.fail::before { content: '✕ '; }
+.gen-attrs { margin: 0; }
+.gen-attrs > div { display: grid; grid-template-columns: 76px 1fr; gap: 8px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 13px; }
+.gen-attrs dt { color: var(--faint); }
+.gen-attrs dd { margin: 0; font-weight: 600; }
+.gen-attrs .changed dd::before { content: '● '; color: var(--accent); font-size: 9px; vertical-align: 2px; }
+.gen-legend { margin: 8px 0 0; font-size: 11.5px; color: var(--faint); }
+.gen-legend::first-letter { color: var(--accent); }

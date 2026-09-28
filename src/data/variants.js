@@ -1,10 +1,12 @@
 // 6개 단계의 설명 데이터. 왼쪽 탭과 오른쪽 노트 패널이 모두 이 파일을 읽는다.
 // line: 한 줄 설명 / conditions: 이번 단계에서 추가된 조건 / points: 화면에서 짚을 변화
 // final: 탐색 결과를 정리한 마지막 단계 (조건 대신 적용 원칙을 보여준다)
+// modeKey: config/designModes.js 의 생성 규칙 키
 
 export const variants = [
   {
     id: 'baseline',
+    modeKey: 'baseline',
     no: '01',
     name: '기본안',
     line: '전형적인 모바일 금융앱 구성',
@@ -13,6 +15,7 @@ export const variants = [
   },
   {
     id: 'minimal',
+    modeKey: 'reducedCards',
     no: '02',
     name: '카드 최소화',
     line: '둥근 컨테이너 사용 축소',
@@ -21,6 +24,7 @@ export const variants = [
   },
   {
     id: 'typography',
+    modeKey: 'typographyFirst',
     no: '03',
     name: '타이포그래피 중심',
     line: '글자 크기·굵기·여백으로 정보 위계 구성',
@@ -29,6 +33,7 @@ export const variants = [
   },
   {
     id: 'nohero',
+    modeKey: 'distributedFocus',
     no: '04',
     name: '대표영역 분산',
     line: '하나의 큰 자산 영역을 여러 정보로 분산',
@@ -37,6 +42,7 @@ export const variants = [
   },
   {
     id: 'info',
+    modeKey: 'informationFirst',
     no: '05',
     name: '정보 중심 배치',
     line: '카드 없이 선·여백·정렬로 정보 구성',
@@ -45,6 +51,7 @@ export const variants = [
   },
   {
     id: 'final',
+    modeKey: 'final',
     no: '06',
     name: '최종안',
     final: true,
