@@ -4,5 +4,3 @@ dist-single
 .DS_Store
 .vercel
 
-# 디자인 참고 문서 (로컬 전용, 웹앱 빌드에는 필요 없음)
-design/
