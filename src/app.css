@@ -1,29 +1,33 @@
 /* ── 발표용 바깥 UI (shell) ───────────────────────────────────────────────
-   design/shell 의 참고 문서를 읽고 옮긴 값. (design/banking 은 6단계 금융앱 전용)
-   - Linear.md  §Layout      "deep continuous canvas, hierarchy through luminance before borders"
+   밝고 차분한 editorial 발표 보드. 색은 사용자 지정 방향(아이보리 바탕, near-black 글자, 제한된 민트),
+   구조 원칙은 design/shell 참고 문서에서 가져왔다. (design/banking 은 6단계 금융앱 전용)
+   - Linear.md  §Layout      "continuous canvas, hierarchy through luminance before borders"
                                → 패널 배경·카드 없이 캔버스 하나, 영역은 1px 선과 여백으로만
-   - Linear.md  §Color       canvas #08090a · fg #f7f8f8 · secondary #d0d6e0 · muted #8a8f98 · quiet #62666d
-                               hairline #1c1d1e · primary action #e5e5e6 / #08090a · secondary 5% white
-   - Linear.md  §Don't       indigo·lime을 기본 CTA로 쓰지 말 것 → 바깥 UI에는 색 강조 없음 (색은 프리뷰 안 금융앱만)
-   - Linear.md  §Typography  nav 13px/400 · body 15/24 · heading 510/590 · display 음수 자간
+   - Linear.md  §Color       글자 밝기 단계로 위계 (fg / fg-2 / muted / quiet)
+   - Linear.md  §Typography  nav 13–14px · body 15/24 · heading 510/590 · display 음수 자간
    - Linear.md  §Layout      "large editorial typography … rather than stacking generic cards"
    - Framer.md  §Principles  "measured compactness over generic pills" → 버튼 6px, pill 없음
    - Framer.md  §Layout      반복 간격 10·15·40px → 바깥 여백 40px, 정렬선이 맞는 3열 그리드
-   - 두 문서 모두 그림자는 역할이 있는 곳에만 → 바깥 UI 그림자 0
-   폰트: 문서의 Inter·GT Walsheim은 대체하지 않고, 한글 표시를 위해 Pretendard를 유지한다. */
+   - 그림자 없음
+   민트: 파비콘의 black + mint 정체성. 면(선택 막대, 주요 버튼)에는 로고 민트 #5CF5AA,
+        흰 바탕 위 작은 글자 강조에는 읽을 수 있는 진한 민트 #0A7A4F. 그 외에는 쓰지 않는다.
+   폰트: 한글 표시를 위해 Pretendard. */
 :root {
-  --canvas: #08090a;
-  --fg: #f7f8f8;
-  --fg-2: #d0d6e0;
-  --muted: #8a8f98;
-  --quiet: #62666d;
-  --hairline: #1c1d1e;
-  --action: #e5e5e6;
-  --action-ink: #08090a;
-  --ghost: rgba(255, 255, 255, 0.05);
-  --danger: #ff6369;
+  --canvas: #faf9f6;
+  --fg: #141414;
+  --fg-2: #3a3a37;
+  --muted: #76756f;
+  --quiet: #a7a59e;
+  --hairline: #e6e4de;
+  --mint: #5cf5aa;
+  --mint-ink: #0a7a4f;
+  --mint-tint: #e3faee;
+  --action: var(--mint);
+  --action-ink: #0b0b0b;
+  --ghost: rgba(20, 20, 20, 0.05);
+  --danger: #b42318;
   --gutter: 40px;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; }
@@ -38,7 +42,7 @@ body {
 }
 /* 버튼 초기화는 바깥 UI에만. 모바일 화면 안의 버튼 스타일에는 영향 주지 않는다 */
 .sidebar button, .stage-foot button { padding: 0; border: 0; background: none; font: inherit; color: inherit; cursor: pointer; }
-.sidebar button:focus-visible, .stage-foot button:focus-visible { outline: 1px solid var(--fg-2); outline-offset: 3px; }
+.sidebar button:focus-visible, .stage-foot button:focus-visible { outline: 2px solid var(--mint-ink); outline-offset: 3px; }
 
 kbd {
   display: inline-block;
@@ -58,7 +62,7 @@ kbd {
 
 /* ── 상단: 제목 + 한 줄 부제. 왼쪽 정렬선은 단계 목록과 같다 ── */
 .topbar { display: flex; align-items: baseline; gap: 16px; padding: 22px var(--gutter) 20px; border-bottom: 1px solid var(--hairline); }
-.topbar h1 { margin: 0; font-size: 15px; font-weight: 590; letter-spacing: -0.2px; color: var(--fg); }
+.topbar h1 { margin: 0; font-size: 16px; font-weight: 750; letter-spacing: -0.3px; color: var(--fg); }
 .topbar p { margin: 0; font-size: 13px; color: var(--muted); }
 
 .main { display: grid; grid-template-columns: 232px 1fr 340px; min-height: 0; }
@@ -67,6 +71,7 @@ kbd {
 .sidebar { display: flex; flex-direction: column; min-height: 0; overflow-y: auto; padding: 32px 24px 28px var(--gutter); border-right: 1px solid var(--hairline); }
 .steps { display: flex; flex-direction: column; }
 .steps .step {
+  position: relative;
   display: flex; align-items: baseline;
   padding: 7px 0;
   font-size: 14px; font-weight: 400; text-align: left;
@@ -74,10 +79,11 @@ kbd {
 }
 .steps .step:hover { color: var(--fg-2); }
 .step-no { width: 32px; flex: none; font-size: 12px; font-weight: 510; color: var(--quiet); font-variant-numeric: tabular-nums; }
-.steps .step.active { font-weight: 590; color: var(--fg); }
-.steps .step.active .step-no { color: var(--fg-2); }
+.steps .step.active { font-weight: 650; color: var(--fg); }
+.steps .step.active .step-no { color: var(--mint-ink); }
+.steps .step.active::after { content: ''; position: absolute; top: 8px; bottom: 8px; left: -14px; width: 3px; background: var(--mint); }
 /* 최종안: 앞 5단계와 선 하나로만 구분 */
-.steps .step.final { position: relative; margin-top: 15px; }
+.steps .step.final { margin-top: 15px; }
 .steps .step.final::before { content: ''; position: absolute; top: -8px; left: 0; right: 0; border-top: 1px solid var(--hairline); }
 
 .side-foot { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--hairline); font-size: 12px; line-height: 1.9; color: var(--quiet); }
@@ -87,7 +93,7 @@ kbd {
 /* ── 가운데: 모바일 프리뷰가 가장 밝은 면 = 화면의 주인공 ── */
 .stage { display: flex; flex-direction: column; align-items: center; min-width: 0; min-height: 0; padding: 32px 24px 18px; }
 .phone-slot { display: flex; flex: 1; align-items: center; justify-content: center; width: 100%; min-height: 0; }
-.phone { position: relative; flex: none; overflow: hidden; background: #fff; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08); }
+.phone { position: relative; flex: none; overflow: hidden; background: #fff; box-shadow: 0 0 0 1px rgba(20, 20, 20, 0.14); }
 .phone-screen { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
 
 /* 조작: pill 없는 작은 컨트롤 (6px, 32px) */
@@ -101,16 +107,17 @@ kbd {
 }
 .stage-foot button:disabled { cursor: default; opacity: 0.35; }
 .stage-foot .regen-btn { background: var(--action); color: var(--action-ink); }
-.stage-foot .regen-btn kbd { border-color: rgba(8, 9, 10, 0.18); color: rgba(8, 9, 10, 0.6); }
-.stage-foot .regen-btn:hover:not(:disabled) { background: #ffffff; }
+.stage-foot .regen-btn { font-weight: 650; }
+.stage-foot .regen-btn kbd { border-color: rgba(11, 11, 11, 0.22); color: rgba(11, 11, 11, 0.65); }
+.stage-foot .regen-btn:hover:not(:disabled) { background: #48ec9c; }
 .stage-foot .peek-btn { background: var(--ghost); color: var(--fg-2); touch-action: none; }
 .stage-foot .peek-btn:hover:not(:disabled) { color: var(--fg); }
-.stage-foot .peek-btn.on { background: rgba(255, 255, 255, 0.12); color: var(--fg); }
+.stage-foot .peek-btn.on { background: var(--mint-tint); color: var(--mint-ink); }
 
 /* ── 오른쪽: 큰 제목 → 본문 → 선 → 목록. 카드 없음 ── */
 .notes { min-height: 0; overflow-y: auto; padding: 32px var(--gutter) 32px 32px; border-left: 1px solid var(--hairline); }
-.notes-no { font-size: 12px; font-weight: 510; color: var(--quiet); font-variant-numeric: tabular-nums; }
-.notes-title { margin: 10px 0 14px; font-size: 34px; font-weight: 510; line-height: 1.1; letter-spacing: -0.9px; color: var(--fg); }
+.notes-no { font-size: 12px; font-weight: 650; color: var(--mint-ink); font-variant-numeric: tabular-nums; }
+.notes-title { margin: 10px 0 14px; font-size: 34px; font-weight: 650; line-height: 1.1; letter-spacing: -0.9px; color: var(--fg); }
 .notes-line { margin: 0; font-size: 15px; line-height: 24px; color: var(--fg-2); }
 
 .notes-sec { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--hairline); }
@@ -124,7 +131,7 @@ kbd {
 .conditions-allowed { margin: 12px 0 0; font-size: 12.5px; color: var(--muted); }
 
 .gen-rules li { position: relative; padding: 2px 0 2px 18px; font-size: 13px; color: var(--fg-2); }
-.gen-rules li::before { content: '✓'; position: absolute; left: 0; color: var(--muted); }
+.gen-rules li::before { content: '✓'; position: absolute; left: 0; color: var(--mint-ink); }
 .gen-rules li.fail { color: var(--danger); }
 .gen-rules li.fail::before { content: '✕'; color: var(--danger); }
 .gen-changed { margin: 14px 0 0; font-size: 13px; line-height: 1.5; color: var(--fg-2); }
@@ -142,4 +149,4 @@ kbd {
 .ref-rules-head { margin-top: 20px !important; }
 
 /* 스크롤바도 캔버스에 묻히게 */
-.sidebar, .notes { scrollbar-width: thin; scrollbar-color: var(--hairline) transparent; }
+.sidebar, .notes { scrollbar-width: thin; scrollbar-color: #d6d4cd transparent; }

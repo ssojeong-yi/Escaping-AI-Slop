@@ -1,5 +1,3 @@
-const commonInfo = ['총자산', '계좌', '송금', '카드 사용금액', '최근 거래'];
-
 export default function StateTabs({ variants, activeIndex, onSelect }) {
   return (
     <aside className="sidebar">
@@ -19,11 +17,6 @@ export default function StateTabs({ variants, activeIndex, onSelect }) {
       </nav>
 
       <div className="side-foot">
-        <p>
-          모든 단계에서 같은 정보
-          <br />
-          <span>{commonInfo.join(' · ')}</span>
-        </p>
         <p>
           <kbd>1</kbd>–<kbd>{variants.length}</kbd> 단계 &nbsp;<kbd>↑</kbd>
           <kbd>↓</kbd> 이동
