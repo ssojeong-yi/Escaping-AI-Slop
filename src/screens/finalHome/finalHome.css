@@ -12,13 +12,15 @@
 .fh .f-unit { margin-left: 2px; font-size: 0.6em; font-weight: var(--f-unit-w); letter-spacing: 0; }
 .fh .f-sub { color: var(--f-sub); }
 .fh .f-muted { color: var(--f-muted); }
-.fh .f-up { font-weight: 700; color: var(--f-accent); }
+.fh .f-up { font-weight: 700; color: var(--f-positive); }
+.fh .f-link-accent { color: var(--f-link); }
+.fh .f-link-accent svg { color: var(--f-link); }
 
 /* 헤더 */
 .f-head { display: flex; align-items: center; justify-content: space-between; padding: 6px var(--f-gutter) 0; }
 .f-brand { font-size: var(--f-title-size); font-weight: 800; letter-spacing: -0.5px; }
 .f-bell { position: relative; display: grid; color: var(--f-ink); }
-.f-bell i { position: absolute; top: 1px; right: 1px; width: 6px; height: 6px; border: 1.5px solid var(--f-canvas); border-radius: 50%; background: var(--f-accent); }
+.f-bell i { position: absolute; top: 1px; right: 1px; width: 6px; height: 6px; border: 1.5px solid var(--f-canvas); border-radius: 50%; background: var(--f-accent-graphic); }
 
 /* 링크 (텍스트 + 이동 표시) */
 .f-more { display: inline-flex; align-items: center; gap: 1px; color: var(--f-sub); white-space: nowrap; }
@@ -41,7 +43,7 @@
   background: var(--f-canvas); color: var(--f-ink);
   font-weight: var(--f-btn-weight);
 }
-.fh .f-btn-primary { border-color: var(--f-accent); background: var(--f-accent); color: var(--f-on-accent); }
+.fh .f-btn-primary { border-color: var(--f-cta); background: var(--f-cta); color: var(--f-on-cta); }
 
 /* 섹션: 사이는 8px 면, 행 사이는 1px 선 */
 .f-sec { padding: var(--f-gap) var(--f-gutter) 4px; border-top: var(--f-band-size) solid var(--f-band); }
@@ -54,7 +56,7 @@
 .f-row-main .t-caption { margin-top: 2px; }
 .f-row-amt { font-size: var(--f-body-size); font-weight: 700; white-space: nowrap; }
 .f-tx-icon { display: grid; flex: none; place-items: center; width: 20px; color: var(--f-muted); }
-.f-tag { margin-left: 6px; padding: 1px 6px; border-radius: var(--f-r-tag); background: var(--f-accent-soft); font-weight: 700; color: var(--f-accent); vertical-align: 1px; }
+.f-tag { margin-left: 6px; padding: 1px 6px; border-radius: var(--f-r-tag); background: var(--f-tag-bg); font-weight: 700; color: var(--f-tag-text); vertical-align: 1px; }
 
 /* 상호작용 묶음 (유일한 카드) */
 .f-group { margin: 6px 0 4px; padding: 16px; border: 1px solid var(--f-line); border-radius: var(--f-r-group); }
@@ -65,7 +67,7 @@
 /* 카드 사용 */
 .f-card-line { display: flex; align-items: baseline; justify-content: space-between; margin-top: 4px; }
 .f-meter { height: 4px; margin: 12px 0 8px; overflow: hidden; background: var(--f-line); }
-.f-meter span { display: block; height: 100%; background: var(--f-ink); }
+.f-meter span { display: block; height: 100%; background: var(--f-accent-graphic); }
 .f-card-foot { display: flex; justify-content: space-between; gap: 8px; padding-bottom: 12px; }
 .f-sublabel { padding: 16px 0 0; font-weight: 500; }
 

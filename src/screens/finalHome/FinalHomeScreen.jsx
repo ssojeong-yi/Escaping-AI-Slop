@@ -19,9 +19,9 @@ function Amount({ value, level = 'amount' }) {
   );
 }
 
-function MoreLink({ children }) {
+function MoreLink({ children, accent }) {
   return (
-    <span className="f-more t-label">
+    <span className={`f-more t-label${accent ? ' f-link-accent' : ''}`}>
       {children}
       <Icon name="chevron" size={T.iconRules.size.link} stroke={T.iconRules.stroke} />
     </span>
@@ -72,14 +72,14 @@ function Total({ schema }) {
             <span className="t-caption f-sub">
               지난달보다 <b className="f-up num">+{won(assetChange.amount)}원</b>
             </span>
-            <MoreLink>자산 분석</MoreLink>
+            <MoreLink accent>자산 분석</MoreLink>
           </div>
         </>
       ) : (
         <>
           <div className="f-total-foot">
             <span className="t-caption f-sub">{user.name}님의 총자산</span>
-            <MoreLink>자산 분석</MoreLink>
+            <MoreLink accent>자산 분석</MoreLink>
           </div>
           <div className="f-total-line">
             <Amount value={totalAssets} level="display" />
@@ -246,7 +246,7 @@ const ZONES = { accounts: AccountsZone, spend: SpendZone, activity: ActivityZone
 
 export default function FinalHomeScreen({ schema }) {
   const ws = T.layout.whitespace[schema.layout.whitespace];
-  const style = { ...tokenCssVars(), '--f-gap': `${ws.sectionGap}px`, '--f-row': `${ws.row}px` };
+  const style = { ...tokenCssVars(schema.theme), '--f-gap': `${ws.sectionGap}px`, '--f-row': `${ws.row}px` };
   return (
     <Shell className="fh" style={style} nav={<TabBar mode="icon" />}>
       <header className="f-head">

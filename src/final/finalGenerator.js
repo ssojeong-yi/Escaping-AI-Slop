@@ -5,6 +5,7 @@
 import { finalDesignTokens as T } from './finalDesignTokens.js';
 import { extractInspiration } from './finalInspiration.js';
 import { runFinalQuality } from './finalQuality.js';
+import { extractReferenceTheme } from './referenceTheme.js';
 import { accounts, transactions } from '../data/finance.js';
 
 const MAX_ATTEMPTS = 6;
@@ -44,10 +45,20 @@ function inventory(layout, content) {
   ];
   const cards = layout.accountEmphasis === 'highlight' ? [{ role: 'interactionGroup' }] : [];
   const textLevels = ['display', 'amount', 'title', 'body', 'label', 'caption'];
-  return { buttons, rows, icons, cards, textLevels };
+  // 강조색이 칠해지는 곳 (렌더러와 같은 규칙)
+  const accentUses = [
+    { role: 'cta' },
+    { role: 'status' }, // 알림 점
+    { role: 'link' }, // 자산 분석
+    { role: 'positive' }, // 총자산 증감
+    { role: 'selected' }, // 주 계좌 태그
+    { role: 'meter' },
+    ...content.transactions.map(() => ({ role: 'positive' })), // 입금만 실제로 칠해짐
+  ];
+  return { buttons, rows, icons, cards, textLevels, accentUses };
 }
 
-function buildSchema(ref, insp, rand, attempt) {
+function buildSchema(ref, insp, rand, attempt, theme) {
   // 섹션 순서: 문서가 언급한 영역은 그 순서 그대로, 언급하지 않은 영역끼리만 바꿀 수 있다
   let zones = [...insp.zoneOrder];
   const free = zones.filter((z) => !insp.mentionedZones.includes(z) && !(insp.ctaPlacement === 'inAccount' && z === 'accounts'));
@@ -102,12 +113,13 @@ function buildSchema(ref, insp, rand, attempt) {
     layout,
     content,
     components: inventory(layout, content),
+    theme,
     bottomNav: true,
   };
 }
 
 /** 검사를 모두 통과하는 기본 배치 (재생성이 계속 실패할 때만 사용) */
-function safeFallback(ref) {
+function safeFallback(ref, theme) {
   const insp = {
     zoneOrder: ['accounts', 'spend', 'activity'],
     mentionedZones: ['accounts', 'spend', 'activity'],
@@ -118,20 +130,21 @@ function safeFallback(ref) {
     whitespace: 'regular',
     totalLayout: 'solo',
   };
-  return buildSchema(ref, insp, () => 0.1, 'fallback');
+  return buildSchema(ref, insp, () => 0.1, 'fallback', theme);
 }
 
 export function generateFinalLayoutFromDesign(reference, { rand = Math.random } = {}) {
   const insp = extractInspiration(reference);
+  const theme = extractReferenceTheme(reference); // 색만 문서에서, 나머지는 고정 시스템
   let failedAttempts = 0;
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
-    const schema = buildSchema(reference, insp, rand, attempt);
+    const schema = buildSchema(reference, insp, rand, attempt, theme);
     const quality = runFinalQuality(schema);
     if (quality.pass) {
-      return { schema, inspiration: insp, quality, attempts: attempt, fallback: false, rejected: { invalid: failedAttempts, similar: 0 } };
+      return { schema, inspiration: insp, theme, quality, attempts: attempt, fallback: false, rejected: { invalid: failedAttempts, similar: 0 } };
     }
     failedAttempts++;
   }
-  const schema = safeFallback(reference);
-  return { schema, inspiration: insp, quality: runFinalQuality(schema), attempts: MAX_ATTEMPTS, fallback: true, rejected: { invalid: failedAttempts, similar: 0 } };
+  const schema = safeFallback(reference, theme);
+  return { schema, inspiration: insp, theme, quality: runFinalQuality(schema), attempts: MAX_ATTEMPTS, fallback: true, rejected: { invalid: failedAttempts, similar: 0 } };
 }

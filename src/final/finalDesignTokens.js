@@ -1,8 +1,12 @@
-// Slop Bank 최종안 디자인 시스템 — 6단계 전용, 재생성해도 절대 바뀌지 않는다.
-// 렌더러(FinalHomeScreen)는 이 파일의 값만 읽고, 품질 검사(finalQuality)도 같은 값으로 검사한다.
-// 참고 문서(design/banking/*.md)는 여기 값을 바꾸지 못한다. 문서는 구조·우선순위의 영감으로만 쓴다.
+// Slop Bank 최종안 디자인 시스템 — 6단계 전용.
+// 고정: 타이포·간격·radius·버튼 형태·아이콘·구분선·컴포넌트 구조·정보 위계 (재생성해도 바뀌지 않는다)
+// 동적: 색만. colors 는 기본값이고, 참고 문서의 색 테마(referenceTheme)가 있으면 그 값으로 덮어쓴다.
+// 강조색이 쓰이는 역할은 accentRoles 로 제한한다.
 
 export const finalDesignTokens = {
+  // 강조색은 이 역할에만: Primary CTA · 선택 상태 · 증가 금액 · 진행 막대 · 알림 상태 · 강조 링크 1개
+  accentRoles: ['cta', 'selected', 'positive', 'meter', 'status', 'link'],
+
   colors: {
     canvas: '#FFFFFF',
     ink: '#14171A', // 제목·금액
@@ -72,20 +76,28 @@ export const finalDesignTokens = {
   limits: { accounts: 2, transactions: 3, actionsMin: 2, actionsMax: 3, primaryCta: 1 },
 };
 
-/** 토큰 → CSS 변수 (렌더러 루트에 inline style로 넣는다) */
-export function tokenCssVars(t = finalDesignTokens) {
+/** 토큰 (+ 참고 문서 색 테마) → CSS 변수. 렌더러 루트에 inline style로 넣는다 */
+export function tokenCssVars(theme = null, t = finalDesignTokens) {
   const c = t.colors;
+  const th = theme || {};
   const ty = t.typography;
   const vars = {
-    '--f-canvas': c.canvas,
-    '--f-ink': c.ink,
-    '--f-sub': c.sub,
-    '--f-muted': c.muted,
-    '--f-line': c.line,
-    '--f-band': c.band,
-    '--f-accent': c.accent,
-    '--f-accent-soft': c.accentSoft,
-    '--f-on-accent': c.onAccent,
+    '--f-canvas': th.background || c.canvas,
+    '--f-ink': th.textPrimary || c.ink,
+    '--f-sub': th.textSecondary || c.sub,
+    '--f-muted': th.textMuted || c.muted,
+    '--f-line': th.divider || c.line,
+    '--f-band': th.surface || c.band,
+    '--f-accent': th.primaryAccent || c.accent, // 면·막대·점 (글자 아님)
+    '--f-accent-ink': th.accentInk || c.accent, // 글자로 쓰는 강조 (대비 4.5:1 보정)
+    '--f-accent-graphic': th.accentGraphic || c.accent, // 막대·점 (대비 3:1 미만이면 중립)
+    '--f-tag-bg': th.tagBg || c.accentSoft,
+    '--f-tag-text': th.tagText || c.accent,
+    '--f-accent-soft': th.accentSoft || c.accentSoft,
+    '--f-cta': th.cta || c.accent,
+    '--f-on-cta': th.onCta || c.onAccent,
+    '--f-link': th.link || c.sub,
+    '--f-positive': th.positive || c.accent,
     '--f-gutter': `${t.layout.gutter}px`,
     '--f-r-control': `${t.radius.control}px`,
     '--f-r-group': `${t.radius.group}px`,
@@ -95,7 +107,7 @@ export function tokenCssVars(t = finalDesignTokens) {
     '--f-btn-weight': t.buttonStyles.primary.weight,
     '--f-band-size': `${t.dividerStyles.section.size}px`,
     '--f-unit-w': ty.unitWeight,
-    '--tab-active': c.ink,
+    '--tab-active': th.textPrimary || c.ink,
     '--tab-idle': '#A7ACB2',
   };
   for (const [role, v] of Object.entries(ty)) {

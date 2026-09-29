@@ -20,7 +20,20 @@ function ReferenceGeneration({ generation }) {
           </div>
         ))}
       </dl>
-      <p className="gen-note">버튼 · radius · 타이포 · 아이콘 · 색은 Slop Bank 디자인 시스템에 고정</p>
+      {generation.theme && (
+        <>
+          <h3 className="ref-rules-head">레퍼런스에서 가져온 색</h3>
+          <dl className="ref-evidence">
+            {generation.theme.sources.map((e) => (
+              <div key={e.label}>
+                <dt>{e.label}</dt>
+                <dd title={e.from}>{e.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </>
+      )}
+      <p className="gen-note">색만 레퍼런스를 따르고, 타이포 · 간격 · radius · 버튼 형태 · 아이콘 · 구분선은 Slop Bank 시스템 고정</p>
       <h3 className="ref-rules-head">
         품질 검사
         <span>
@@ -86,12 +99,28 @@ export default function NotesPanel({ variant, generation }) {
       <h2 className="notes-title">{variant.name}</h2>
       <p className="notes-line">{variant.line}</p>
       {generation?.reference && (
-        <p className="ref-used">
-          이번 생성에 참고한 디자인: <b>{generation.reference.name}</b>
-          <span>
-            {generation.reference.file} · {generation.cycle.position}/{generation.cycle.total}
-          </span>
-        </p>
+        <div className="ref-used">
+          <p>
+            참고 디자인 <b>{generation.reference.name}</b>
+            <span className="ref-file">
+              {generation.reference.file} · {generation.cycle.position}/{generation.cycle.total}
+            </span>
+          </p>
+          {generation.theme && (
+            <p className="ref-color">
+              강조색
+              <i style={{ background: generation.theme.primaryAccent }} />
+              <b className="num">{generation.theme.primaryAccent}</b>
+              {generation.theme.cta !== generation.theme.primaryAccent && (
+                <>
+                  <span>CTA</span>
+                  <i style={{ background: generation.theme.cta }} />
+                  <b className="num">{generation.theme.cta}</b>
+                </>
+              )}
+            </p>
+          )}
+        </div>
       )}
 
       <section className="notes-sec conditions">

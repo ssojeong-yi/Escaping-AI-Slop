@@ -320,6 +320,11 @@ export function parseDesignMarkdown(markdown, file) {
     priority,
     mentioned,
     excludedColors: brandOnly,
+    // 최종안 색 테마용 원본: 문서 순서 그대로의 색 목록, 문서가 명시한 행동(CTA) 색, 분위기 문장
+    colors,
+    documentedCta: fillCandidate?.hex || compButton?.bg || null,
+    documentedCtaFrom: fillCandidate ? `색상: ${fillCandidate.label}` : compButton ? `컴포넌트: ${compButton.name}` : null,
+    atmosphere: subsection(s.experience, /visual theme/i),
     tokens: {
       canvas,
       ink,

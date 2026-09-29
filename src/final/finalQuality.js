@@ -53,6 +53,16 @@ export const FINAL_QUALITY_CHECKS = [
     test: (s) => s.layout.ctaPlacement !== 'inAccount' || s.layout.zoneOrder[0] === 'accounts',
   },
   {
+    id: 'contrast',
+    label: '색 대비 충분 (4.5:1 이상)',
+    test: (s) => !s.theme || Object.values(s.theme.contrast).every((v) => v >= 4.5),
+  },
+  {
+    id: 'accentRoles',
+    label: '강조색은 CTA·중요 상태에만',
+    test: (s) => s.components.accentUses.every((u) => T.accentRoles.includes(u.role)),
+  },
+  {
     id: 'typeHierarchy',
     label: '타이포그래피 위계',
     test: (s) => ['display', 'title', 'body', 'caption'].every((l) => s.components.textLevels.includes(l)),
