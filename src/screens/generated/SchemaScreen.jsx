@@ -777,7 +777,11 @@ export default function SchemaScreen({ schema }) {
   ].join(' ');
 
   return (
-    <Shell className={className} nav={<TabBar mode={hasIcons(schema) ? 'icon' : 'text'} />}>
+    <Shell
+      className={className}
+      style={schema.tokens ? { '--r': `${schema.tokens.radius}px` } : undefined}
+      nav={<TabBar mode={hasIcons(schema) ? 'icon' : 'text'} />}
+    >
       <Header schema={schema} />
       {schema.rows.map((row, i) => {
         // 대표 계좌 안에 들어간 송금은 따로 줄을 만들지 않는다

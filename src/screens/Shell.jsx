@@ -48,9 +48,9 @@ export function TabBar({ mode = 'icon' }) {
 }
 
 /** 모든 화면이 공유하는 뼈대: 상태바 / 스크롤 영역 / 탭바 / 홈 인디케이터 */
-export default function Shell({ className, nav, children }) {
+export default function Shell({ className, style, nav, children }) {
   return (
-    <div className={`screen ${className}`}>
+    <div className={`screen ${className}`} style={style}>
       <StatusBar />
       <div className="screen-body">{children}</div>
       {nav}

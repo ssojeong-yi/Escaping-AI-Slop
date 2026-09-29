@@ -117,6 +117,7 @@ export function buildSchema(modeKey, seed) {
     callout,
     joins: mode.joins ?? [],
     embedTransfer: Boolean(mode.embedTransferInAccount),
+    tokens: mode.tokens ? Object.fromEntries(Object.entries(mode.tokens).map(([k, v]) => [k, pick(v)])) : null,
     rows,
     sections: rows.flat().map((type) => ({ id: type, type, variant: variants[type] })),
   };
@@ -133,13 +134,14 @@ export function validateSchema(schema) {
 const COMPARE_KEYS = [
   'header', 'alignment', 'density', 'dividerStyle', 'iconUsage', 'titleScale',
   'numberWeight', 'assetEmphasis', 'accentStyle', 'heroTone', 'quickMenu', 'labelColumn', 'numberedTitles', 'txSummary',
-  'container', 'callout',
+  'container', 'callout', 'radius',
 ];
 
 /** 두 schema가 얼마나 다른지 (다른 속성 수). 순서·줄 구성·섹션 표현은 2점씩 */
 export function schemaDistance(a, b) {
   if (!a || !b) return Infinity;
-  let d = COMPARE_KEYS.filter((k) => a[k] !== b[k]).length;
+  const val = (s, k) => (k === 'radius' ? s.tokens?.radius : s[k]);
+  let d = COMPARE_KEYS.filter((k) => val(a, k) !== val(b, k)).length;
   if (a.sectionOrder.join() !== b.sectionOrder.join()) d += 2;
   if (a.rows.map((r) => r.length).join() !== b.rows.map((r) => r.length).join()) d += 2;
   d += 2 * a.sections.filter((s) => b.sections.find((x) => x.type === s.type).variant !== s.variant).length;

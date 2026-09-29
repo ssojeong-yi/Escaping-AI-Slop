@@ -39,5 +39,6 @@ export function describeSchema(schema) {
     { key: 'iconUsage', label: '아이콘', value: n('iconUsage') },
     { key: 'titleScale', label: '제목 크기', value: n('titleScale') },
     { key: 'numberWeight', label: '숫자 굵기', value: n('numberWeight') },
+    ...(schema.tokens ? [{ key: 'radius', label: 'Radius', value: `${schema.tokens.radius}px` }] : []),
   ];
 }

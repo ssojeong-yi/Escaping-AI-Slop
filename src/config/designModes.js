@@ -226,6 +226,12 @@ export const designModes = {
       ['accountList', 'transferAction', 'cardSpend', 'recentTransactions'],
       ['accountList', 'transferAction', 'recentTransactions', 'cardSpend'],
     ],
+    // 디자인 토큰: design/ 참고 문서(국내 은행 7곳) 공통 원칙 — 그림자 없음, 작고 역할별인 radius.
+    // 렌더러가 이 값으로 그리고, 아래 rules가 같은 값을 검사한다.
+    tokens: {
+      radius: [6, 8], // 박스·버튼 (칩은 radius - 2, 목록·막대는 0)
+      shadow: ['none'],
+    },
     // 송금(최근 보낸 사람)은 대표 계좌 박스 바로 아래, 다른 계좌보다 먼저 그린다
     embedTransferInAccount: true,
     // 앞 섹션과 한 묶음으로 붙여 그리는 쌍 (사이에 구분선·면 구분을 넣지 않는다)
@@ -249,6 +255,8 @@ export const designModes = {
       },
       { label: '아이콘은 행동·상태에만', test: (s) => s.iconUsage === 'functional' },
       { label: '강조색 1개', test: (s) => s.accentStyle === 'fill' && s.skin === 'final' },
+      { label: '그림자 없음', test: (s) => s.tokens?.shadow === 'none' },
+      { label: 'Radius 8px 이하', test: (s) => s.tokens?.radius <= 8 },
     ],
   },
 };
