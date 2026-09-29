@@ -1,6 +1,6 @@
 import Shell, { TabBar } from './Shell.jsx';
 import Icon from '../components/Icon.jsx';
-import { asOf, accounts, totalAssets, assetChange, card, transfer, transactionsByDay } from '../data/finance.js';
+import { brand, asOf, accounts, totalAssets, assetChange, card, transfer, transactionsByDay } from '../data/finance.js';
 import { won, signed, pct } from '../lib/format.js';
 import './final.css';
 
@@ -27,7 +27,7 @@ export default function FinalScreen() {
   return (
     <Shell className="fn" nav={<TabBar mode="icon" />}>
       <header className="fn-head">
-        <span className="fn-brand">모아뱅크</span>
+        <span className="fn-brand">{brand.name}</span>
         <span className="fn-head-right">
           <span className="num">{asOf.short}</span>
           <Icon name="bell" size={21} />

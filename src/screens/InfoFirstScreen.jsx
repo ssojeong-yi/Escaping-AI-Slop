@@ -1,5 +1,6 @@
 import Shell, { TabBar } from './Shell.jsx';
 import {
+  brand,
   asOf,
   accounts,
   totalAssets,
@@ -31,7 +32,7 @@ export default function InfoFirstScreen() {
   return (
     <Shell className="if" nav={<TabBar mode="text" />}>
       <header className="if-head">
-        <strong>모아뱅크</strong>
+        <strong>{brand.name}</strong>
         <span className="num">
           {asOf.short} {asOf.time} 기준
         </span>

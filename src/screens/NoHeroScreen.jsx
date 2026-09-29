@@ -1,6 +1,6 @@
 import Shell, { TabBar } from './Shell.jsx';
 import Icon from '../components/Icon.jsx';
-import { user, asOf, accounts, totalAssets, assetChange, card, transfer, transactions } from '../data/finance.js';
+import { brand, user, asOf, accounts, totalAssets, assetChange, card, transfer, transactions } from '../data/finance.js';
 import { won, signed, pct } from '../lib/format.js';
 import './nohero.css';
 
@@ -30,7 +30,9 @@ export default function NoHeroScreen() {
     <Shell className="nh" nav={<TabBar mode="icon" />}>
       <header className="nh-head">
         <div>
-          <div className="nh-date">{asOf.date}</div>
+          <div className="nh-date">
+            <b>{brand.name}</b> · {asOf.date}
+          </div>
           <div className="nh-title">{user.short}님의 오늘</div>
         </div>
         <div className="nh-head-btns">

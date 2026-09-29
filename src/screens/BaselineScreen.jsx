@@ -1,6 +1,6 @@
 import Shell, { TabBar } from './Shell.jsx';
 import Icon from '../components/Icon.jsx';
-import { user, accounts, totalAssets, assetChange, card, transfer, transactions } from '../data/finance.js';
+import { brand, user, accounts, totalAssets, assetChange, card, transfer, transactions } from '../data/finance.js';
 import { won, signed, pct } from '../lib/format.js';
 import RoundIcon from './RoundIcon.jsx';
 import { avatarTones, quickActions } from './tones.js';
@@ -12,7 +12,8 @@ export default function BaselineScreen() {
     <Shell className="bl" nav={<TabBar mode="icon" />}>
       <header className="bl-header">
         <div className="bl-logo">
-          <span className="bl-logo-mark">M</span>모아뱅크
+          <span className="bl-logo-mark">{brand.mark}</span>
+          {brand.name}
         </div>
         <div className="bl-header-icons">
           <Icon name="search" size={22} />

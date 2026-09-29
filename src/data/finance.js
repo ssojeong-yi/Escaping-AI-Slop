@@ -1,12 +1,15 @@
 // 5개 상태가 모두 공유하는 단일 금융 데이터.
 // 화면마다 표현만 달라지고, 값은 항상 여기서만 읽는다.
 
-export const user = { name: '김서연', short: '서연' };
+// 샘플 브랜드·사용자명은 여기서만 정한다. 원본 화면과 생성 화면이 모두 이 값을 읽는다.
+export const brand = { name: '슬롭뱅크', short: '슬롭', mark: 'S' };
+
+export const user = { name: '이소정', short: '소정' };
 
 export const asOf = { date: '9월 28일 월요일', short: '9.28 (월)', time: '08:45' };
 
 export const accounts = [
-  { id: 'checking', name: '모아 입출금통장', type: '입출금', number: '110-482-913572', balance: 3245800, icon: 'wallet' },
+  { id: 'checking', name: `${brand.short} 입출금통장`, type: '입출금', number: '110-482-913572', balance: 3245800, icon: 'wallet' },
   { id: 'savings', name: '26주 자유적금', type: '적금', number: '220-17-004581', balance: 12000000, icon: 'layers', note: '연 3.4%' },
   { id: 'isa', name: 'ISA 중개형', type: '투자', number: '8014-2231-07', balance: 33080700, icon: 'trend', note: '수익률 +8.2%' },
 ];
@@ -16,7 +19,7 @@ export const totalAssets = accounts.reduce((sum, a) => sum + a.balance, 0); // 4
 export const assetChange = { amount: 1284300, rate: 2.7 };
 
 export const card = {
-  name: '모아 플러스 카드',
+  name: `${brand.short} 플러스 카드`,
   spent: 872450,
   limit: 3000000,
   due: '10월 14일',

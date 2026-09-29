@@ -3,6 +3,7 @@
 
 .nh-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 20px 16px; }
 .nh-date { font-size: 12.5px; color: #6B7280; }
+.nh-date b { font-weight: 800; color: #15181D; }
 .nh-title { margin-top: 2px; font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
 .nh-head-btns { display: flex; gap: 8px; }
 .nh-head-btns span {

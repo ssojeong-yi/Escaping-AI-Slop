@@ -1,5 +1,5 @@
 import Shell, { TabBar } from './Shell.jsx';
-import { user, asOf, accounts, totalAssets, assetChange, card, transfer, transactionsByDay } from '../data/finance.js';
+import { brand, user, asOf, accounts, totalAssets, assetChange, card, transfer, transactionsByDay } from '../data/finance.js';
 import { won, signed, pct } from '../lib/format.js';
 import './typography.css';
 
@@ -22,7 +22,7 @@ export default function TypographyScreen() {
   return (
     <Shell className="ty" nav={<TabBar mode="text" />}>
       <header className="ty-head">
-        <span className="ty-brand">모아뱅크</span>
+        <span className="ty-brand">{brand.name}</span>
         <span className="ty-head-meta">{asOf.date}</span>
       </header>
 

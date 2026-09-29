@@ -2,7 +2,7 @@ import Shell, { TabBar } from './Shell.jsx';
 import Icon from '../components/Icon.jsx';
 import RoundIcon from './RoundIcon.jsx';
 import { avatarTones, quickActions } from './tones.js';
-import { user, accounts, totalAssets, assetChange, card, transfer, transactions } from '../data/finance.js';
+import { brand, user, accounts, totalAssets, assetChange, card, transfer, transactions } from '../data/finance.js';
 import { won, signed, pct } from '../lib/format.js';
 import './minimal.css';
 
@@ -25,7 +25,8 @@ export default function MinimalCardScreen() {
     <Shell className="mc" nav={<TabBar mode="icon" />}>
       <header className="mc-head">
         <div className="mc-logo">
-          <span className="mc-logo-mark">M</span>모아뱅크
+          <span className="mc-logo-mark">{brand.mark}</span>
+          {brand.name}
         </div>
         <div className="mc-head-icons">
           <Icon name="search" size={22} />

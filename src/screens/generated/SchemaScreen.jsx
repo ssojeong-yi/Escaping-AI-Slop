@@ -4,6 +4,7 @@ import Icon from '../../components/Icon.jsx';
 import RoundIcon from '../RoundIcon.jsx';
 import { avatarTones, iconTones, quickActions } from '../tones.js';
 import {
+  brand,
   user,
   asOf,
   accounts,
@@ -112,10 +113,10 @@ function QuickIcons({ boxed }) {
 function Header({ schema }) {
   const deco = isDeco(schema);
   const icons = deco ? ['search', 'bell', 'menu'] : hasIcons(schema) ? ['bell'] : [];
-  const brand = (
+  const brandMark = (
     <div className="g-brand">
-      {deco && <span className="g-brand-mark">M</span>}
-      모아뱅크
+      {deco && <span className="g-brand-mark">{brand.mark}</span>}
+      {brand.name}
     </div>
   );
   const right = icons.length ? (
@@ -133,7 +134,7 @@ function Header({ schema }) {
       return (
         <header className="g-head g-head-greeting">
           <div className="g-head-row">
-            {brand}
+            {brandMark}
             <span className="g-head-meta">{asOf.date}</span>
           </div>
           <h1>
@@ -147,7 +148,9 @@ function Header({ schema }) {
       return (
         <header className="g-head g-head-row">
           <div>
-            <div className="g-head-meta">{asOf.date}</div>
+            <div className="g-head-meta">
+              <b className="g-head-brand">{brand.name}</b> · {asOf.date}
+            </div>
             <div className="g-head-title">{user.short}님의 오늘</div>
           </div>
           {right}
@@ -156,7 +159,7 @@ function Header({ schema }) {
     case 'dateline':
       return (
         <header className="g-head g-head-row g-dateline">
-          {brand}
+          {brandMark}
           <span className="g-head-meta num">
             {asOf.short} {asOf.time} 기준
           </span>
@@ -166,7 +169,7 @@ function Header({ schema }) {
       return (
         <header className="g-head">
           <div className="g-head-row">
-            {brand}
+            {brandMark}
             {right}
           </div>
           {schema.header === 'brandGreeting' && <p className="g-greet">{user.name}님, 좋은 하루 보내세요</p>}
