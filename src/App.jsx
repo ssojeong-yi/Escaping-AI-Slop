@@ -125,21 +125,8 @@ export default function App() {
   return (
     <div className="app">
       <header className="topbar">
-        <div className="brand">
-          <h1>Escaping AI Slop</h1>
-          <span>AI가 만든 비슷한 화면에서 벗어나기</span>
-        </div>
-        <div className="stepper">
-          <button onClick={() => setIndex((index - 1 + count) % count)} aria-label="이전 단계">
-            ←
-          </button>
-          <span className="stepper-count">
-            <b>{current.no}</b> / {String(count).padStart(2, '0')}
-          </span>
-          <button onClick={() => setIndex((index + 1) % count)} aria-label="다음 단계">
-            →
-          </button>
-        </div>
+        <h1>Escaping AI Slop</h1>
+        <p>AI가 만든 비슷한 화면에서 벗어나기</p>
       </header>
 
       <main className="main">
@@ -151,7 +138,7 @@ export default function App() {
           </PhoneFrame>
           <div className="stage-foot">
             <button className="regen-btn" onClick={regenerate} disabled={peeking}>
-              <span aria-hidden="true">↻</span> 다시 생성 <kbd>R</kbd>
+              다시 생성 <kbd>R</kbd>
             </button>
             {/* 버튼을 교체하지 않고 라벨만 바꿔야 pointerup이 같은 요소에서 잡힌다 */}
             <button
@@ -161,12 +148,12 @@ export default function App() {
               onPointerUp={endPeek}
               onPointerLeave={endPeek}
             >
-              {peeking ? '기본안 보는 중 · 떼면 돌아갑니다' : '누르고 있으면 기본안과 비교'}
+              {peeking ? '기본안 보는 중 · 떼면 돌아갑니다' : '누르고 있으면 기본안과 비교'} <kbd>Space</kbd>
             </button>
           </div>
         </section>
 
-        <NotesPanel variant={current} total={count} generation={generated[current.id]} />
+        <NotesPanel variant={current} generation={generated[current.id]} />
       </main>
     </div>
   );
