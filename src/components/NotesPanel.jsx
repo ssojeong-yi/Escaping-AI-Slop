@@ -1,6 +1,42 @@
 import { designModes } from '../config/designModes.js';
 import { validateSchema } from '../services/mockLayoutGenerator.js';
 import { describeSchema } from '../lib/describeSchema.js';
+import { REFERENCE_RULES, validateReferenceSchema } from '../services/referenceLayoutGenerator.js';
+
+// 6단계: 참고 문서(design/banking/*.md)에서 읽어 반영한 것 + 원칙 검사
+function ReferenceGeneration({ generation }) {
+  const { reference, schema, count } = generation;
+  const failed = validateReferenceSchema(schema);
+  return (
+    <section className="notes-sec gen-info">
+      <h3>
+        문서에서 읽어 반영한 것
+        <span>생성 {count}</span>
+      </h3>
+      <dl className="ref-evidence">
+        {reference.evidence.map((e) => (
+          <div key={e.label}>
+            <dt>{e.label}</dt>
+            <dd title={e.source}>{e.value}</dd>
+          </div>
+        ))}
+      </dl>
+      <h3 className="ref-rules-head">
+        금융앱 공통 원칙
+        <span>
+          {REFERENCE_RULES.length - failed.length}/{REFERENCE_RULES.length} 통과
+        </span>
+      </h3>
+      <ul className="gen-rules">
+        {REFERENCE_RULES.map((r) => (
+          <li key={r.label} className={failed.includes(r.label) ? 'fail' : ''}>
+            {r.label}
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
 
 // 생성 결과: 원칙 통과 여부와 직전 결과에서 바뀐 점만 짧게
 function Generation({ variant, generation }) {
@@ -43,6 +79,14 @@ export default function NotesPanel({ variant, generation }) {
       <div className="notes-no">{variant.no}</div>
       <h2 className="notes-title">{variant.name}</h2>
       <p className="notes-line">{variant.line}</p>
+      {generation?.reference && (
+        <p className="ref-used">
+          이번 생성에 참고한 디자인: <b>{generation.reference.name}</b>
+          <span>
+            {generation.reference.file} · {generation.cycle.position}/{generation.cycle.total}
+          </span>
+        </p>
+      )}
 
       <section className="notes-sec conditions">
         <h3>{variant.conditionsTitle ?? '기본안 대비 바꾼 것'}</h3>
@@ -58,7 +102,12 @@ export default function NotesPanel({ variant, generation }) {
         {variant.allowed && <p className="conditions-allowed">허용 · {variant.allowed.join(' · ')}</p>}
       </section>
 
-      {generation && <Generation variant={variant} generation={generation} />}
+      {generation &&
+        (generation.reference ? (
+          <ReferenceGeneration generation={generation} />
+        ) : (
+          <Generation variant={variant} generation={generation} />
+        ))}
     </aside>
   );
 }
