@@ -1,39 +1,45 @@
 import { designModes } from '../config/designModes.js';
 import { validateSchema } from '../services/mockLayoutGenerator.js';
 import { describeSchema } from '../lib/describeSchema.js';
-import { REFERENCE_RULES, validateReferenceSchema } from '../services/referenceLayoutGenerator.js';
 
-// 6단계: 참고 문서(design/banking/*.md)에서 읽어 반영한 것 + 원칙 검사
+// 6단계: 참고 문서에서 가져온 구조 + 고정 디자인 시스템 + 품질 검사
 function ReferenceGeneration({ generation }) {
-  const { reference, schema, count } = generation;
-  const failed = validateReferenceSchema(schema);
+  const { inspiration, quality, count, fallback, rejected } = generation;
+  const passed = quality.results.filter((r) => r.pass).length;
   return (
     <section className="notes-sec gen-info">
       <h3>
-        문서에서 읽어 반영한 것
+        레퍼런스에서 가져온 구조
         <span>생성 {count}</span>
       </h3>
       <dl className="ref-evidence">
-        {reference.evidence.map((e) => (
+        {inspiration.notes.map((e) => (
           <div key={e.label}>
             <dt>{e.label}</dt>
             <dd title={e.source}>{e.value}</dd>
           </div>
         ))}
       </dl>
+      <p className="gen-note">버튼 · radius · 타이포 · 아이콘 · 색은 Slop Bank 디자인 시스템에 고정</p>
       <h3 className="ref-rules-head">
-        금융앱 공통 원칙
+        품질 검사
         <span>
-          {REFERENCE_RULES.length - failed.length}/{REFERENCE_RULES.length} 통과
+          {passed}/{quality.results.length} 통과
         </span>
       </h3>
       <ul className="gen-rules">
-        {REFERENCE_RULES.map((r) => (
-          <li key={r.label} className={failed.includes(r.label) ? 'fail' : ''}>
+        {quality.results.map((r) => (
+          <li key={r.id} className={r.pass ? '' : 'fail'}>
             {r.label}
           </li>
         ))}
       </ul>
+      {(rejected.invalid > 0 || fallback) && (
+        <p className="gen-note">
+          {rejected.invalid > 0 && `검사 실패 후보 ${rejected.invalid}개 재생성`}
+          {fallback && ' · 안전한 기본 배치 적용'}
+        </p>
+      )}
     </section>
   );
 }

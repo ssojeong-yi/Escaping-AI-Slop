@@ -9,16 +9,17 @@
 
 import { generateMockBankingLayout } from './mockLayoutGenerator.js';
 import { getNextDesignReference, loadDesignReferences } from './designReferences.js';
-import { generateFinalLayoutFromDesign } from './referenceLayoutGenerator.js';
+import { generateFinalLayoutFromDesign } from '../final/finalGenerator.js';
 
 /** 6단계 최종안이 참고 문서(design/banking/*.md)를 쓸 수 있는지 */
 export const hasDesignReferences = () => loadDesignReferences().length > 0;
 
 export async function generateLayout(modeKey, options = {}) {
-  // 6단계만: 참고 문서를 셔플백으로 하나 골라 그 내용으로 생성. 문서가 없으면 기존 최종안 규칙으로.
+  // 6단계만: 참고 문서를 셔플백으로 하나 골라, 그 구조적 영감을 Slop Bank 고정 디자인 시스템 안에서 재해석.
+  // 문서가 없으면 기존 최종안 규칙으로.
   if (modeKey === 'final' && hasDesignReferences()) {
     const pick = getNextDesignReference();
-    const result = generateFinalLayoutFromDesign(pick.reference, options);
+    const result = generateFinalLayoutFromDesign(pick.reference);
     return { ...result, reference: pick.reference, cycle: { position: pick.position, total: pick.total, round: pick.round } };
   }
   return generateMockBankingLayout(modeKey, options);

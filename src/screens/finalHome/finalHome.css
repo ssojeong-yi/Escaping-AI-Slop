@@ -1,0 +1,80 @@
+/* 6단계 최종안. 모든 값은 finalDesignTokens → CSS 변수(--f-*)에서 온다. 여기서 새 색·크기·radius를 만들지 않는다. */
+.fh { background: var(--f-canvas); color: var(--f-ink); }
+.fh .tabbar { border-top: 1px solid var(--f-line); background: var(--f-canvas); }
+
+/* 타이포 단계 */
+.fh .t-display { font-size: var(--f-display-size); font-weight: var(--f-display-weight); letter-spacing: var(--f-display-track); line-height: var(--f-display-lh); }
+.fh .t-amount { font-size: var(--f-amount-size); font-weight: var(--f-amount-weight); letter-spacing: var(--f-amount-track); line-height: var(--f-amount-lh); }
+.fh .t-title { font-size: var(--f-title-size); font-weight: var(--f-title-weight); letter-spacing: var(--f-title-track); line-height: var(--f-title-lh); }
+.fh .t-body { font-size: var(--f-body-size); font-weight: var(--f-body-weight); letter-spacing: var(--f-body-track); line-height: var(--f-body-lh); }
+.fh .t-label { font-size: var(--f-label-size); font-weight: var(--f-label-weight); letter-spacing: var(--f-label-track); line-height: var(--f-label-lh); }
+.fh .t-caption { font-size: var(--f-caption-size); font-weight: var(--f-caption-weight); letter-spacing: var(--f-caption-track); line-height: var(--f-caption-lh); }
+.fh .f-unit { margin-left: 2px; font-size: 0.6em; font-weight: var(--f-unit-w); letter-spacing: 0; }
+.fh .f-sub { color: var(--f-sub); }
+.fh .f-muted { color: var(--f-muted); }
+.fh .f-up { font-weight: 700; color: var(--f-accent); }
+
+/* 헤더 */
+.f-head { display: flex; align-items: center; justify-content: space-between; padding: 6px var(--f-gutter) 0; }
+.f-brand { font-size: var(--f-title-size); font-weight: 800; letter-spacing: -0.5px; }
+.f-bell { position: relative; display: grid; color: var(--f-ink); }
+.f-bell i { position: absolute; top: 1px; right: 1px; width: 6px; height: 6px; border: 1.5px solid var(--f-canvas); border-radius: 50%; background: var(--f-accent); }
+
+/* 링크 (텍스트 + 이동 표시) */
+.f-more { display: inline-flex; align-items: center; gap: 1px; color: var(--f-sub); white-space: nowrap; }
+.f-more svg { color: var(--f-muted); }
+.f-more-row { padding: 10px 0 2px; }
+
+/* 총자산 */
+.f-total { padding: var(--f-gap) var(--f-gutter) var(--f-gap); }
+.f-total .t-display { display: block; margin: 6px 0 8px; }
+.f-total-foot { display: flex; align-items: center; justify-content: space-between; }
+.f-total-line { display: flex; align-items: baseline; justify-content: space-between; }
+.f-total.split .t-display { margin: 6px 0 0; }
+
+/* 버튼 — primary / secondary 두 가지뿐, radius·높이 고정 */
+.f-actions { display: grid; gap: 8px; margin-top: 16px; }
+.fh .f-btn {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  height: var(--f-btn-h); padding: 0 12px;
+  border: 1px solid var(--f-line); border-radius: var(--f-r-control);
+  background: var(--f-canvas); color: var(--f-ink);
+  font-weight: var(--f-btn-weight);
+}
+.fh .f-btn-primary { border-color: var(--f-accent); background: var(--f-accent); color: var(--f-on-accent); }
+
+/* 섹션: 사이는 8px 면, 행 사이는 1px 선 */
+.f-sec { padding: var(--f-gap) var(--f-gutter) 4px; border-top: var(--f-band-size) solid var(--f-band); }
+.f-sec-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px; }
+.f-sec-head .t-title span { margin-left: 6px; color: var(--f-muted); }
+
+.f-row { display: flex; align-items: center; gap: 12px; padding: var(--f-row) 0; border-bottom: 1px solid var(--f-line); }
+.f-row:last-child { border-bottom: 0; }
+.f-row-main { flex: 1; min-width: 0; }
+.f-row-main .t-caption { margin-top: 2px; }
+.f-row-amt { font-size: var(--f-body-size); font-weight: 700; white-space: nowrap; }
+.f-tx-icon { display: grid; flex: none; place-items: center; width: 20px; color: var(--f-muted); }
+.f-tag { margin-left: 6px; padding: 1px 6px; border-radius: var(--f-r-tag); background: var(--f-accent-soft); font-weight: 700; color: var(--f-accent); vertical-align: 1px; }
+
+/* 상호작용 묶음 (유일한 카드) */
+.f-group { margin: 6px 0 4px; padding: 16px; border: 1px solid var(--f-line); border-radius: var(--f-r-group); }
+.f-group .t-caption { margin-top: 2px; }
+.f-group-amt { margin-top: 12px; }
+.f-group + .f-row { border-top: 0; }
+
+/* 카드 사용 */
+.f-card-line { display: flex; align-items: baseline; justify-content: space-between; margin-top: 4px; }
+.f-meter { height: 4px; margin: 12px 0 8px; overflow: hidden; background: var(--f-line); }
+.f-meter span { display: block; height: 100%; background: var(--f-ink); }
+.f-card-foot { display: flex; justify-content: space-between; gap: 8px; padding-bottom: 12px; }
+.f-sublabel { padding: 16px 0 0; font-weight: 500; }
+
+.f-end { height: 12px; }
+
+/* 2열 요약 (그리드 + 세로 선, 박스 없음) */
+.f-overview { display: grid; grid-template-columns: 1fr 1fr; padding: 0 var(--f-gutter) var(--f-gap); }
+.f-overview > div { min-width: 0; padding-top: 14px; border-top: 1px solid var(--f-line); }
+.f-overview > div + div { padding-left: 16px; margin-left: 16px; border-left: 1px solid var(--f-line); }
+.f-overview .t-amount { display: block; margin: 4px 0 0; }
+.f-overview .f-meter { margin: 10px 0 6px; }
+.f-overview-gap { height: 20px; }

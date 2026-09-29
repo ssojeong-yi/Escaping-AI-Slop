@@ -5,7 +5,7 @@ import StateTabs from './components/StateTabs.jsx';
 import PhoneFrame from './components/PhoneFrame.jsx';
 import NotesPanel from './components/NotesPanel.jsx';
 import SchemaScreen from './screens/generated/SchemaScreen.jsx';
-import ReferenceScreen from './screens/reference/ReferenceScreen.jsx';
+import FinalHomeScreen from './screens/finalHome/FinalHomeScreen.jsx';
 import { generateLayout, hasDesignReferences } from './services/layoutService.js';
 
 const count = variants.length;
@@ -145,8 +145,8 @@ export default function App() {
           <PhoneFrame>
             {!shownGen ? (
               <Screen key={screenKey} />
-            ) : shownGen.schema.kind === 'reference' ? (
-              <ReferenceScreen key={screenKey} schema={shownGen.schema} />
+            ) : shownGen.schema.kind === 'finalHome' ? (
+              <FinalHomeScreen key={screenKey} schema={shownGen.schema} />
             ) : (
               <SchemaScreen key={screenKey} schema={shownGen.schema} />
             )}
