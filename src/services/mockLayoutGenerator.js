@@ -39,8 +39,8 @@ export function buildSchema(modeKey, seed) {
 
   const variants = Object.fromEntries(SECTION_TYPES.map((t) => [t, pick(mode.sections[t])]));
 
-  // 1) 순서: 총자산은 항상 첫 줄(사용성). 나머지 4개는 섞는다.
-  let rest = shuffle(SECTION_TYPES.slice(1), rand);
+  // 1) 순서: 총자산은 항상 첫 줄(사용성). 나머지 4개는 섞되, mode가 허용 순서(orders)를 주면 그중에서만 고른다.
+  let rest = mode.orders ? [...pick(mode.orders)] : shuffle(SECTION_TYPES.slice(1), rand);
 
   // 2) 줄(row) 구성: 한 줄에 1개 또는 2개(2열)
   const rows = [];
@@ -115,6 +115,8 @@ export function buildSchema(modeKey, seed) {
     numberedTitles: pick(mode.numberedTitles),
     txSummary: rand() < 0.5,
     callout,
+    joins: mode.joins ?? [],
+    embedTransfer: Boolean(mode.embedTransferInAccount),
     rows,
     sections: rows.flat().map((type) => ({ id: type, type, variant: variants[type] })),
   };

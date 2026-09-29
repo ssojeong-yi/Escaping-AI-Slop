@@ -1,92 +1,109 @@
 import Shell, { TabBar } from './Shell.jsx';
 import Icon from '../components/Icon.jsx';
-import { brand, asOf, accounts, totalAssets, assetChange, card, transfer, transactionsByDay } from '../data/finance.js';
+import { brand, user, accounts, totalAssets, assetChange, card, transfer, transactionsByDay } from '../data/finance.js';
 import { won, signed, pct } from '../lib/format.js';
 import './final.css';
 
-// 최종안: 앞선 실험에서 효과가 좋았던 원칙만 골라 실제 뱅킹앱 수준으로 정리.
-// - 총자산은 박스 없이 타이포그래피로 (02·03)
-// - 카드 사용액·잔액을 총자산 바로 아래 나란히 (04)
-// - 구분은 선·여백·정렬로 (05), 박스는 기능 묶음인 송금 하나만
-// - 아이콘은 행동을 설명할 때만, 강조색은 하나
-function SectionHead({ title, count, link }) {
+// 최종안: 금융앱의 기본 UX(총자산 → 대표 계좌·송금 → 카드 → 거래 → 하단 탭)는 그대로 두고,
+// AI가 반복하는 평균적인 시각 패턴(카드 반복, 큰 radius, gradient·shadow, 장식 아이콘, 거대한 Hero)만 걷어낸다.
+// - 총자산은 카드 없이 숫자로. 화면을 지배하지 않는 크기
+// - 박스는 "대표 계좌 + 송금" 한 곳만 (기능 묶음이라 필요한 경우)
+// - 나머지 구분은 간격·얇은 선·정렬, 강조색은 하나, 아이콘은 행동·상태에만
+
+const [primary, ...others] = accounts;
+const usage = Number(pct(card.spent, card.limit, 0));
+
+function SectionHead({ title, meta, link }) {
   return (
     <div className="fn-sec-head">
       <h3>
         {title}
-        {count != null && <span>{count}</span>}
+        {meta && <span>{meta}</span>}
       </h3>
-      {link && <span className="fn-link">{link}</span>}
+      {link && (
+        <span className="fn-link">
+          {link}
+          <Icon name="chevron" size={14} stroke={2} />
+        </span>
+      )}
     </div>
   );
 }
 
 export default function FinalScreen() {
-  const usage = pct(card.spent, card.limit, 0);
-  const checking = accounts[0];
   return (
     <Shell className="fn" nav={<TabBar mode="icon" />}>
       <header className="fn-head">
         <span className="fn-brand">{brand.name}</span>
-        <span className="fn-head-right">
-          <span className="num">{asOf.short}</span>
-          <Icon name="bell" size={21} />
+        <span className="fn-bell" aria-label="알림 2건">
+          <Icon name="bell" size={22} />
+          <i />
         </span>
       </header>
 
+      {/* 총자산: 카드 없이 숫자로 */}
       <section className="fn-total">
-        <div className="fn-label">총자산</div>
-        <div className="fn-amount num">
+        <div className="fn-total-label">{user.name}님의 총자산</div>
+        <div className="fn-total-amt num">
           {won(totalAssets)}
           <span>원</span>
         </div>
-        <div className="fn-delta">
-          지난달보다 <b className="num">+{won(assetChange.amount)}원</b> · {assetChange.rate}%
+        <div className="fn-total-sub">
+          <span>
+            지난달보다 <b className="num">+{won(assetChange.amount)}원</b>
+          </span>
+          <span className="fn-link">
+            자산 분석
+            <Icon name="chevron" size={14} stroke={2} />
+          </span>
         </div>
-        <div className="fn-actions">
+      </section>
+
+      {/* 대표 계좌 + 송금: 화면에서 유일한 박스 */}
+      <section className="fn-primary">
+        <div className="fn-primary-top">
+          <div>
+            <div className="fn-primary-name">{primary.name}</div>
+            <div className="fn-primary-no num">{primary.number}</div>
+          </div>
+          <span className="fn-tag">대표</span>
+        </div>
+        <div className="fn-primary-amt num">
+          {won(primary.balance)}
+          <span>원</span>
+        </div>
+        <div className="fn-primary-actions">
+          <button className="fn-btn">내역</button>
           <button className="fn-btn primary">
-            <Icon name="send" size={17} stroke={2} />
+            <Icon name="send" size={16} stroke={2.1} />
             송금
           </button>
-          <button className="fn-btn">
-            <Icon name="qr" size={17} stroke={2} />
-            QR 결제
-          </button>
         </div>
       </section>
 
-      <section className="fn-summary">
-        <div className="fn-cell">
-          <div className="fn-cell-label">이번 달 카드</div>
-          <div className="fn-cell-value num">
-            {won(card.spent)}
-            <span>원</span>
-          </div>
-          <div className="fn-meter">
-            <span style={{ width: `${usage}%` }} />
-          </div>
-          <div className="fn-cell-sub num">
-            한도 {usage}% · 결제 {card.dueShort}
-          </div>
+      <div className="fn-recent">
+        <span className="fn-recent-label">최근 보낸 사람</span>
+        <div className="fn-chips">
+          {transfer.recent.map((p) => (
+            <span key={p.name} className="fn-chip">
+              {p.name}
+            </span>
+          ))}
+          <span className="fn-chip add">
+            <Icon name="plus" size={13} stroke={2.2} />새 송금
+          </span>
         </div>
-        <div className="fn-cell">
-          <div className="fn-cell-label">바로 쓸 수 있는 돈</div>
-          <div className="fn-cell-value num">
-            {won(checking.balance)}
-            <span>원</span>
-          </div>
-          <div className="fn-cell-sub fn-cell-sub-gap">{checking.name}</div>
-        </div>
-      </section>
+      </div>
 
+      {/* 다른 계좌 */}
       <section className="fn-sec">
-        <SectionHead title="계좌" count={accounts.length} link="전체 ›" />
-        {accounts.map((a) => (
+        <SectionHead title="다른 계좌" meta={others.length} link="전체" />
+        {others.map((a) => (
           <div key={a.id} className="fn-row">
             <div className="fn-row-main">
               <div className="fn-row-title">{a.name}</div>
-              <div className="fn-row-sub num">
-                {a.type} · {a.number}
+              <div className="fn-row-sub">
+                {a.type} · {a.note}
               </div>
             </div>
             <div className="fn-row-amt num">{won(a.balance)}원</div>
@@ -94,31 +111,33 @@ export default function FinalScreen() {
         ))}
       </section>
 
+      {/* 카드 사용금액 */}
       <section className="fn-sec">
-        <SectionHead title="송금" link={`1일 한도 ${won(transfer.dailyLimit)}원`} />
-        <div className="fn-send">
-          {transfer.recent.map((p) => (
-            <span key={p.name} className="fn-send-item">
-              <b>{p.name}</b>
-              <small className="num">
-                {p.bank} ···{p.tail}
-              </small>
-            </span>
-          ))}
-          <span className="fn-send-item fn-send-new">
-            <Icon name="plus" size={18} stroke={2} />
-            새 송금
+        <SectionHead title="이번 달 카드" meta={card.name} link="내역" />
+        <div className="fn-card-line">
+          <span className="fn-card-amt num">
+            {won(card.spent)}
+            <span>원</span>
           </span>
+          <span className="fn-card-due num">결제일 {card.due}</span>
+        </div>
+        <div className="fn-meter" role="img" aria-label={`한도의 ${usage}% 사용`}>
+          <span style={{ width: `${usage}%` }} />
+        </div>
+        <div className="fn-card-foot num">
+          <span>
+            한도 {won(card.limit)}원 중 <b>{usage}%</b>
+          </span>
+          <span>지난달보다 {Math.abs(card.vsLastMonth)}% 적게 씀</span>
         </div>
       </section>
 
+      {/* 최근 거래 */}
       <section className="fn-sec">
-        <SectionHead title="최근 거래" link="전체 ›" />
+        <SectionHead title="최근 거래" link="전체" />
         {transactionsByDay.map((g) => (
           <div key={g.date}>
-            <div className="fn-day">
-              {g.day} <span className="num">{g.date}</span>
-            </div>
+            <div className="fn-day">{g.day}</div>
             {g.items.map((t) => (
               <div key={t.id} className="fn-row fn-tx">
                 <div className="fn-row-main">

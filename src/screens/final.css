@@ -1,88 +1,89 @@
-/* 강조색은 --fn-accent 하나. 나머지는 회색 단계로만 위계를 만든다. */
+/* 최종안: 강조색은 --fn-accent 하나. radius는 작게, gradient·shadow 없음. */
 .fn {
   --fn-accent: #0B7A5C;
-  --fn-ink: #14171A;
-  --fn-sub: #6B7178;
-  --fn-faint: #9AA0A6;
-  --fn-line: #E6E8EA;
-  --tab-active: var(--fn-accent);
-  --tab-idle: #A4A9AF;
+  --fn-accent-soft: #E8F4EF;
+  --fn-ink: #15181C;
+  --fn-sub: #5F656D;
+  --fn-faint: #979DA5;
+  --fn-line: #ECEEF0;
+  --fn-gap: 14px;
+  --tab-active: var(--fn-ink);
+  --tab-idle: #A7ACB2;
   background: #fff;
   color: var(--fn-ink);
 }
 .fn .tabbar { border-top: 1px solid var(--fn-line); }
 
 .fn-head { display: flex; align-items: center; justify-content: space-between; padding: 6px 20px 0; }
-.fn-brand { font-size: 17px; font-weight: 800; letter-spacing: -0.4px; }
-.fn-head-right { display: flex; align-items: center; gap: 14px; font-size: 13px; color: var(--fn-sub); }
-.fn-head-right svg { color: var(--fn-ink); }
+.fn-brand { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+.fn-bell { position: relative; display: grid; color: var(--fn-ink); }
+.fn-bell i { position: absolute; top: 1px; right: 1px; width: 6px; height: 6px; border: 1.5px solid #fff; border-radius: 50%; background: var(--fn-accent); }
 
-/* 총자산: 박스 없이 숫자 크기로 */
-.fn-total { padding: 26px 20px 22px; }
-.fn-label { font-size: 14px; font-weight: 600; color: var(--fn-sub); }
-.fn-amount { margin-top: 6px; font-size: 38px; font-weight: 700; line-height: 1.1; letter-spacing: -1.4px; }
-.fn-amount span { margin-left: 3px; font-size: 20px; font-weight: 600; letter-spacing: 0; }
-.fn-delta { margin-top: 8px; font-size: 13.5px; color: var(--fn-sub); }
-.fn-delta b { font-weight: 600; color: var(--fn-accent); }
-.fn-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 20px; }
+.fn-link { display: inline-flex; align-items: center; gap: 1px; font-size: 13px; font-weight: 500; color: var(--fn-sub); }
+.fn-link svg { color: var(--fn-faint); }
+
+/* 총자산 */
+.fn-total { padding: 22px 20px 20px; }
+.fn-total-label { font-size: 14px; font-weight: 500; color: var(--fn-sub); }
+.fn-total-amt { margin-top: 6px; font-size: 32px; font-weight: 750; line-height: 1.15; letter-spacing: -1.1px; }
+.fn-total-amt span { margin-left: 2px; font-size: 20px; font-weight: 650; letter-spacing: 0; }
+.fn-total-sub { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; font-size: 13.5px; color: var(--fn-sub); }
+.fn-total-sub b { font-weight: 650; color: var(--fn-accent); }
+
+/* 대표 계좌 + 송금 (유일한 박스: radius 작게, 그림자 없음) */
+.fn-primary { margin: 0 16px; padding: 16px 16px 14px; border: 1px solid #E2E5E8; border-radius: 12px; }
+.fn-primary-top { display: flex; align-items: flex-start; justify-content: space-between; }
+.fn-primary-name { font-size: 14.5px; font-weight: 650; }
+.fn-primary-no { margin-top: 2px; font-size: 12.5px; color: var(--fn-faint); }
+.fn-tag { padding: 2px 7px; border-radius: 4px; background: var(--fn-accent-soft); font-size: 11.5px; font-weight: 700; color: var(--fn-accent); }
+.fn-primary-amt { margin-top: 14px; font-size: 24px; font-weight: 750; letter-spacing: -0.7px; }
+.fn-primary-amt span { margin-left: 2px; font-size: 16px; font-weight: 650; letter-spacing: 0; }
+.fn-primary-actions { display: grid; grid-template-columns: 1fr 1.6fr; gap: 8px; margin-top: 14px; }
 .fn-btn {
-  display: flex; align-items: center; justify-content: center; gap: 7px;
-  height: 46px;
-  border: 1px solid #D6D9DD; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  height: 44px;
+  border: 1px solid #DDE0E4; border-radius: 10px;
   background: #fff; color: var(--fn-ink);
   font-size: 15px; font-weight: 700;
 }
 .fn-btn.primary { border-color: var(--fn-accent); background: var(--fn-accent); color: #fff; }
 
-/* 대표영역 분산: 카드 사용액과 잔액을 같은 무게로 나란히 */
-.fn-summary {
-  display: grid; grid-template-columns: 1fr 1fr;
-  margin: 0 20px;
-  border-top: 1px solid var(--fn-ink);
-  border-bottom: 1px solid var(--fn-line);
+/* 최근 보낸 사람 */
+.fn-recent { display: flex; align-items: center; gap: 10px; padding: 12px 20px 0; }
+.fn-recent-label { flex: none; font-size: 12.5px; color: var(--fn-faint); }
+.fn-chips { display: flex; gap: 6px; min-width: 0; overflow: hidden; }
+.fn-chip {
+  display: inline-flex; align-items: center; gap: 2px;
+  height: 28px; padding: 0 10px;
+  border: 1px solid #E2E5E8; border-radius: 8px;
+  font-size: 13px; font-weight: 600; white-space: nowrap;
 }
-.fn-cell { padding: 14px 0 16px; }
-.fn-cell + .fn-cell { padding-left: 16px; border-left: 1px solid var(--fn-line); }
-.fn-cell:first-child { padding-right: 16px; }
-.fn-cell-label { font-size: 12.5px; font-weight: 600; color: var(--fn-sub); }
-.fn-cell-value { margin-top: 6px; font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
-.fn-cell-value span { margin-left: 1px; font-size: 14px; font-weight: 600; }
-.fn-meter { height: 3px; margin-top: 10px; background: #EEF0F2; }
-.fn-meter span { display: block; height: 100%; background: var(--fn-ink); }
-.fn-cell-sub { margin-top: 6px; font-size: 12px; color: var(--fn-faint); }
-.fn-cell-sub-gap { margin-top: 19px; }
+.fn-chip.add { border-style: dashed; color: var(--fn-sub); }
 
-/* 섹션: 선·여백·정렬 */
-.fn-sec { padding: 26px 20px 4px; }
-.fn-sec-head { display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid var(--fn-ink); }
-.fn-sec-head h3 { font-size: 16px; font-weight: 700; }
-.fn-sec-head h3 span { margin-left: 6px; font-weight: 500; color: var(--fn-faint); }
-.fn-link { font-size: 12.5px; color: var(--fn-sub); }
+/* 섹션: 간격 + 얇은 선 */
+.fn-sec { margin-top: 26px; padding: 20px 20px 4px; border-top: 8px solid #F4F5F6; }
+.fn-sec-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.fn-sec-head h3 { font-size: 17px; font-weight: 700; letter-spacing: -0.4px; }
+.fn-sec-head h3 span { margin-left: 6px; font-size: 14px; font-weight: 500; color: var(--fn-faint); }
 
-.fn-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--fn-line); }
+.fn-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--fn-line); }
+.fn-row:last-child { border-bottom: 0; }
 .fn-row-main { min-width: 0; }
 .fn-row-title { font-size: 15px; font-weight: 600; }
-.fn-row-sub { margin-top: 3px; font-size: 12.5px; color: var(--fn-faint); }
-.fn-row-amt { font-size: 15px; font-weight: 600; white-space: nowrap; }
+.fn-row-sub { margin-top: 2px; font-size: 12.5px; color: var(--fn-faint); }
+.fn-row-amt { font-size: 15.5px; font-weight: 700; white-space: nowrap; }
 .fn-row-amt.in { color: var(--fn-accent); }
-.fn-tx { padding: 11px 0; }
+.fn-tx { padding: 10px 0; }
 
-/* 유일한 박스: 기능 묶음인 송금 대상 */
-.fn-send {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  margin-top: 12px;
-  border-radius: 12px;
-  background: #F4F5F6;
-}
-.fn-send-item {
-  display: flex; flex-direction: column; justify-content: center; gap: 3px;
-  min-height: 64px; padding: 0 12px;
-}
-.fn-send-item + .fn-send-item { border-left: 1px solid #E4E6E8; }
-.fn-send-item b { font-size: 14.5px; font-weight: 700; white-space: nowrap; }
-.fn-send-item small { font-size: 11.5px; color: var(--fn-faint); white-space: nowrap; }
-.fn-send-new { align-items: center; font-size: 12.5px; font-weight: 700; color: var(--fn-ink); }
+/* 카드 사용금액 */
+.fn-card-line { display: flex; align-items: baseline; justify-content: space-between; margin-top: 8px; }
+.fn-card-amt { font-size: 22px; font-weight: 750; letter-spacing: -0.6px; }
+.fn-card-amt span { margin-left: 2px; font-size: 15px; font-weight: 650; letter-spacing: 0; }
+.fn-card-due { font-size: 13px; color: var(--fn-sub); }
+.fn-meter { height: 6px; margin: 12px 0 8px; overflow: hidden; border-radius: 3px; background: #EEF0F2; }
+.fn-meter span { display: block; height: 100%; border-radius: 3px; background: var(--fn-ink); }
+.fn-card-foot { display: flex; justify-content: space-between; padding-bottom: 14px; font-size: 12.5px; color: var(--fn-faint); }
+.fn-card-foot b { font-weight: 700; color: var(--fn-ink); }
 
-.fn-day { padding: 16px 0 2px; font-size: 12.5px; font-weight: 700; color: var(--fn-sub); }
-.fn-day span { margin-left: 4px; font-weight: 500; color: var(--fn-faint); }
-.fn-sec:last-child { padding-bottom: 24px; }
+.fn-day { padding: 12px 0 0; font-size: 12.5px; font-weight: 600; color: var(--fn-faint); }
+.fn-sec:last-child { padding-bottom: 20px; }

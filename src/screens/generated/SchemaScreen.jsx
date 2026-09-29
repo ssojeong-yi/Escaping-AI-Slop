@@ -267,6 +267,25 @@ function AssetSummary({ variant, schema }) {
     );
   }
 
+  if (variant === 'total') {
+    // 최종안: 카드 없이 숫자로, 화면을 지배하지 않는 크기
+    return (
+      <div className={`g-total em-${schema.assetEmphasis}`}>
+        <div className="g-label">{user.name}님의 총자산</div>
+        <Amount value={totalAssets} className="g-total-amt" />
+        <div className="g-total-sub">
+          <span>
+            지난달보다 <b className="num">+{won(assetChange.amount)}원</b>
+          </span>
+          <span className="g-link-chev">
+            자산 분석
+            <Icon name="chevron" size={14} stroke={2} />
+          </span>
+        </div>
+      </div>
+    );
+  }
+
   // compact: 다른 요약과 나란히 놓이는 크기
   return (
     <div className="g-compact">
@@ -281,8 +300,66 @@ function AssetSummary({ variant, schema }) {
 
 /* ---------- accountList ---------- */
 
+function PrimaryAccount({ variant, schema }) {
+  const [primary, ...others] = accounts;
+  const inline = variant === 'primaryInline';
+  return (
+    <div>
+      <div className={`g-primary${inline ? ' inline' : ''}`}>
+        <div className="g-primary-top">
+          <div>
+            <div className="g-row-title">{primary.name}</div>
+            <div className="g-sub num">{primary.number}</div>
+          </div>
+          {!inline && <span className="g-tag">대표</span>}
+        </div>
+        <div className="g-primary-body">
+          <Amount value={primary.balance} className="g-primary-amt" />
+          {inline ? (
+            <button className={`g-btn primary ${schema.accentStyle} g-primary-send`}>
+              <Icon name="send" size={15} stroke={2.1} />
+              송금
+            </button>
+          ) : null}
+        </div>
+        {!inline && (
+          <div className="g-primary-actions">
+            <button className="g-btn">내역</button>
+            <button className={`g-btn primary ${schema.accentStyle}`}>
+              <Icon name="send" size={16} stroke={2.1} />
+              송금
+            </button>
+          </div>
+        )}
+      </div>
+      {schema.embedTransfer && (
+        <div className="g-embedded">
+          <TransferAction variant={schema.sections.find((x) => x.type === 'transferAction').variant} schema={schema} />
+        </div>
+      )}
+      <div className="g-others">
+        <div className="g-others-head">
+          다른 계좌 <span>{others.length}</span>
+        </div>
+        {others.map((a) => (
+          <div key={a.id} className="g-row-item">
+            <div className="g-row-main">
+              <div className="g-row-title">{a.name}</div>
+              <div className="g-sub">
+                {a.type} · {a.note}
+              </div>
+            </div>
+            <span className="g-row-amt num">{won(a.balance)}원</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function AccountList({ variant, schema, bare }) {
   const deco = isDeco(schema);
+  if (variant === 'primary' || variant === 'primaryInline') return <PrimaryAccount variant={variant} schema={schema} />;
   return (
     <div>
       {!bare && <Title type="accountList" schema={schema} />}
@@ -360,6 +437,23 @@ function TransferAction({ variant, schema, bare }) {
         </div>
         <div className="g-compact-names">{transfer.recent.map((p) => p.name).join(' · ')}</div>
         <button className={`g-btn primary sm ${schema.accentStyle}`}>보내기</button>
+      </div>
+    );
+  }
+  if (variant === 'chips') {
+    return (
+      <div className="g-chips-row">
+        <span className="g-sub">최근 보낸 사람</span>
+        <div className="g-chips">
+          {transfer.recent.map((p) => (
+            <span key={p.name} className="g-chip">
+              {p.name}
+            </span>
+          ))}
+          <span className="g-chip add">
+            <Icon name="plus" size={13} stroke={2.2} />새 송금
+          </span>
+        </div>
       </div>
     );
   }
@@ -465,6 +559,30 @@ function CardSpend({ variant, schema, bare }) {
   return (
     <div>
       {!bare && <Title type="cardSpend" schema={schema} />}
+      {variant === 'barCategories' && (
+        <>
+          <div className="g-split">
+            <Amount value={card.spent} className="g-card-amt" />
+            <span className="g-sub num">결제일 {card.due}</span>
+          </div>
+          <div className="g-meter lg">
+            <span style={{ width: `${usage}%` }} />
+          </div>
+          <div className="g-catlist">
+            {card.categories.map((c) => (
+              <span key={c.name}>
+                {c.name} <b className="num">{won(c.amount)}</b>
+              </span>
+            ))}
+          </div>
+          <div className="g-foot">
+            <span>
+              한도 {won(card.limit)}원 중 {usage}%
+            </span>
+            <span>지난달보다 {Math.abs(card.vsLastMonth)}% 적게 씀</span>
+          </div>
+        </>
+      )}
       {variant === 'bar' && (
         <>
           <Amount value={card.spent} className="g-card-amt" />
@@ -598,7 +716,7 @@ const RENDERERS = {
 
 /* ---------- 줄(row) 배치 ---------- */
 
-function Row({ sections, schema, first }) {
+function Row({ sections, schema, first, joined }) {
   const boxed = schema.container !== 'none';
   const render = (s, bare) => {
     const R = RENDERERS[s.type];
@@ -625,7 +743,7 @@ function Row({ sections, schema, first }) {
   const labeled = schema.labelColumn && s.type !== 'assetSummary';
   const callout = !boxed && schema.callout === s.type;
   return (
-    <div className={`g-row${first ? ' first' : ' sep'}`}>
+    <div className={`g-row${first ? ' first' : ' sep'}${joined ? ' joined' : ''}`}>
       <div
         className={`g-inner${boxed && !selfBoxed ? ' g-box' : ''}${labeled ? ' g-labeled' : ''}${callout ? ' g-callout' : ''}`}
       >
@@ -661,9 +779,17 @@ export default function SchemaScreen({ schema }) {
   return (
     <Shell className={className} nav={<TabBar mode={hasIcons(schema) ? 'icon' : 'text'} />}>
       <Header schema={schema} />
-      {schema.rows.map((row, i) => (
-        <Row key={row.join('+')} sections={row.map((t) => byType[t])} schema={schema} first={i === 0} />
-      ))}
+      {schema.rows.map((row, i) => {
+        // 대표 계좌 안에 들어간 송금은 따로 줄을 만들지 않는다
+        if (schema.embedTransfer && row.length === 1 && row[0] === 'transferAction') return null;
+        // mode가 한 묶음으로 지정한 쌍(예: 대표 계좌 → 송금)은 구분선 없이 붙여 그린다
+        const prev = schema.rows[i - 1];
+        const joined =
+          prev && row.length === 1 && prev.length === 1 && (schema.joins ?? []).some(([a, b]) => a === prev[0] && b === row[0]);
+        return (
+          <Row key={row.join('+')} sections={row.map((t) => byType[t])} schema={schema} first={i === 0} joined={joined} />
+        );
+      })}
       <div className="g-end" />
     </Shell>
   );

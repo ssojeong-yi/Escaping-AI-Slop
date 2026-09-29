@@ -17,7 +17,7 @@ const rowOf = (s, type) => s.rows.findIndex((r) => r.includes(type));
 const boxedCount = (s) =>
   s.container !== 'none'
     ? s.sections.length
-    : s.sections.filter((x) => ['hero', 'box', 'tiles'].includes(x.variant)).length + (s.callout ? 1 : 0);
+    : s.sections.filter((x) => ['hero', 'box', 'tiles', 'primary', 'primaryInline'].includes(x.variant)).length + (s.callout ? 1 : 0);
 
 export const designModes = {
   // 1단계: 추가 제약 없음.
@@ -198,42 +198,57 @@ export const designModes = {
     ],
   },
 
-  // 6단계: 2~5단계에서 효과가 좋았던 원칙을 골라 직접 조합 (상속 아님).
+  // 6단계 최종안: "금융앱인데 기존 AI 결과와는 다른" 화면.
+  // 금융앱 기본 UX(총자산 → 대표 계좌·송금 → 카드·거래 → 하단 탭)는 고정하고,
+  // AI 평균 패턴(카드 반복, 큰 radius, gradient·shadow, 장식 아이콘, 거대한 Hero)만 배제한다.
+  // 다른 실험 탭과 달리 순서·표현의 변화 폭을 좁게 둔다. (2~5단계 설정을 상속하지 않고 여기 직접 적는다)
   final: {
     label: '최종안',
     skin: 'final',
-    header: ['brand', 'date'],
+    header: ['brand'],
     container: ['none'],
     alignment: ['left'],
     density: ['regular', 'compact'],
-    dividerStyle: ['hairline', 'rule'],
+    dividerStyle: ['band', 'hairline'],
     iconUsage: ['functional'],
-    titleScale: ['md', 'sm'],
+    titleScale: ['md'],
     numberWeight: ['bold'],
     assetEmphasis: ['large', 'medium'],
+    accentStyle: ['fill'],
     heroTone: [null],
     quickMenu: [false],
     labelColumn: [false],
     numberedTitles: [false],
-    pairable: ['cardSpend', 'transferAction'],
-    pairChance: 0.4,
-    requirePairAfterBlock: true,
-    transferWithinRows: 3,
+    pairable: [],
+    pairChance: 0,
+    // 총자산 다음 순서. 대표 계좌·송금은 항상 바로 이어지고, 카드·거래 순서만 바뀐다.
+    orders: [
+      ['accountList', 'transferAction', 'cardSpend', 'recentTransactions'],
+      ['accountList', 'transferAction', 'recentTransactions', 'cardSpend'],
+    ],
+    // 송금(최근 보낸 사람)은 대표 계좌 박스 바로 아래, 다른 계좌보다 먼저 그린다
+    embedTransferInAccount: true,
+    // 앞 섹션과 한 묶음으로 붙여 그리는 쌍 (사이에 구분선·면 구분을 넣지 않는다)
+    joins: [
+      ['assetSummary', 'accountList'],
+      ['accountList', 'transferAction'],
+    ],
     sections: {
-      assetSummary: ['block', 'strip'],
-      accountList: ['rows', 'table'],
-      transferAction: ['box', 'list', 'buttonRow'],
-      cardSpend: ['bar', 'breakdown'],
-      recentTransactions: ['grouped', 'ledger', 'flat'],
+      assetSummary: ['total'],
+      accountList: ['primary', 'primaryInline'],
+      transferAction: ['chips'],
+      cardSpend: ['bar', 'barCategories'],
+      recentTransactions: ['grouped', 'flat'],
     },
     rules: [
-      { label: '박스는 최대 1개', test: (s) => boxedCount(s) <= 1 },
+      { label: '거대한 Hero 카드 없음', test: (s) => sec(s, 'assetSummary').variant === 'total' },
+      { label: '박스는 대표 계좌 1곳만', test: (s) => boxedCount(s) <= 1 },
       {
-        label: '대표영역 분산',
-        test: (s) => sec(s, 'assetSummary').variant === 'strip' || (s.rows[1] && s.rows[1].length > 1),
+        label: '금융앱 기본 흐름 유지',
+        test: (s) => s.sectionOrder[0] === 'assetSummary' && s.sectionOrder[1] === 'accountList' && s.sectionOrder[2] === 'transferAction',
       },
-      { label: '행동 아이콘만 사용', test: (s) => s.iconUsage === 'functional' },
-      { label: '송금은 상단 3줄 안', test: (s) => rowOf(s, 'transferAction') < 3 },
+      { label: '아이콘은 행동·상태에만', test: (s) => s.iconUsage === 'functional' },
+      { label: '강조색 1개', test: (s) => s.accentStyle === 'fill' && s.skin === 'final' },
     ],
   },
 };
