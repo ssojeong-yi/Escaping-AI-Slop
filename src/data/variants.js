@@ -1,5 +1,6 @@
 // 6개 단계의 설명 데이터. 왼쪽 탭과 오른쪽 노트 패널이 모두 이 파일을 읽는다.
-// line: 한 줄 설명 / conditions: 이번 단계에서 추가된 조건 / points: 화면에서 짚을 변화
+// line: 한 줄 설명 / conditions: 기본안 대비 이 단계에만 적용하는 조건 / points: 화면에서 짚을 변화
+// allowed: 이 단계에서 금지하지 않는 것 (2~5단계는 독립 실험이라 다른 단계의 제약을 물려받지 않는다)
 // final: 탐색 결과를 정리한 마지막 단계 (조건 대신 적용 원칙을 보여준다)
 // modeKey: config/designModes.js 의 생성 규칙 키
 
@@ -9,7 +10,7 @@ export const variants = [
     modeKey: 'baseline',
     no: '01',
     name: '기본안',
-    line: '전형적인 모바일 금융앱 구성',
+    line: '추가 제약 없이 생성한 전형적인 모바일 금융앱',
     conditions: [],
     points: ['총자산 히어로 카드가 시선을 독점', '모든 정보 묶음이 둥근 카드 + 그림자', '색상 원 아이콘으로 항목 구분'],
   },
@@ -18,8 +19,8 @@ export const variants = [
     modeKey: 'reducedCards',
     no: '02',
     name: '카드 최소화',
-    line: '둥근 컨테이너 사용 축소',
-    conditions: ['카드형 컨테이너 최소화'],
+    line: '카드형 컨테이너 사용을 줄이고 여백과 구분선으로 정보 구분',
+    conditions: ['카드형 컨테이너 최소화', '여백 · 구분선 · 섹션 구분으로 정보 구분'],
     points: ['히어로·섹션 카드 → 배경 없이 여백으로', '카드 경계 대신 1px 구분선', '색·아이콘·순서는 기본안 그대로'],
   },
   {
@@ -27,8 +28,9 @@ export const variants = [
     modeKey: 'typographyFirst',
     no: '03',
     name: '타이포그래피 중심',
-    line: '글자 크기·굵기·여백으로 정보 위계 구성',
-    conditions: ['글자 크기 / 굵기 / 여백 중심', '장식 아이콘 최소화'],
+    line: '글자 크기·굵기·여백으로 정보 위계를 구성',
+    allowed: ['카드 사용 가능 (필요하다고 판단할 때)'],
+    conditions: ['글자 크기 · 굵기 · 행간 · 여백으로 위계', '색상보다 타이포그래피 우선', '장식 아이콘 최소화'],
     points: ['아이콘·색상 제거, 탭바도 텍스트만', '총자산은 크고 가는 숫자로 강조', '섹션은 굵은 선과 번호로 구분'],
   },
   {
@@ -36,8 +38,9 @@ export const variants = [
     modeKey: 'distributedFocus',
     no: '04',
     name: '대표영역 분산',
-    line: '하나의 큰 자산 영역을 여러 정보로 분산',
-    conditions: ['대형 Hero 영역 제거', '주요 정보 균형 배치'],
+    line: '하나의 큰 자산 영역이 화면을 지배하지 않도록 정보 분산',
+    allowed: ['카드 사용 가능'],
+    conditions: ['대형 자산 카드 / Hero 영역 제거', '총자산 · 계좌 · 소비 정보 균형 배치'],
     points: ['총자산은 4개 요약 중 하나', '요약 금액을 같은 크기로 통일', '첫 화면에서 카드·송금까지 확인'],
   },
   {
@@ -45,8 +48,9 @@ export const variants = [
     modeKey: 'informationFirst',
     no: '05',
     name: '정보 중심 배치',
-    line: '카드 없이 선·여백·정렬로 정보 구성',
-    conditions: ['카드 없이 정보 직접 배치', 'Grid / Divider / Spacing 활용', 'SaaS Dashboard 스타일 지양'],
+    line: '전형적인 금융앱 구조 대신 타이포그래피·그리드·여백 중심으로 구성',
+    allowed: ['필요하면 카드 1개까지 (강조 박스)'],
+    conditions: ['전형적인 금융앱 레이아웃 탈피', '타이포그래피 · 그리드 · 여백 · 구분선 중심', 'SaaS Dashboard · 카드 반복 구조 지양'],
     points: ['왼쪽 라벨 열 + 오른쪽 정렬 숫자', '비중·카테고리를 수치와 얇은 막대로', '색은 입금 표시 한 가지만'],
   },
   {
@@ -55,7 +59,7 @@ export const variants = [
     no: '06',
     name: '최종안',
     final: true,
-    line: '탐색 결과를 바탕으로 효과적인 디자인 원칙을 선별해 하나의 방향으로 정리',
+    line: '앞선 실험 결과에서 효과적인 원칙을 선별해 하나의 방향으로 정리',
     conditionsTitle: '적용한 원칙',
     conditions: [
       '카드 사용 최소화',

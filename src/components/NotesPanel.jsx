@@ -58,7 +58,7 @@ export default function NotesPanel({ variant, total, generation }) {
       <p className="notes-line">{variant.line}</p>
 
       <div className={`conditions${variant.final ? ' final' : ''}`}>
-        <div className="side-label">{variant.conditionsTitle ?? '이번 단계에서 추가된 조건'}</div>
+        <div className="side-label">{variant.conditionsTitle ?? '기본안 대비 이 단계의 조건'}</div>
         {variant.conditions.length ? (
           <ul>
             {variant.conditions.map((c) => (
@@ -67,6 +67,12 @@ export default function NotesPanel({ variant, total, generation }) {
           </ul>
         ) : (
           <p className="conditions-none">추가 조건 없음</p>
+        )}
+        {variant.allowed && (
+          <p className="conditions-allowed">
+            <span>허용</span>
+            {variant.allowed.join(' · ')}
+          </p>
         )}
       </div>
 

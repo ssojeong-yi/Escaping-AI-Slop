@@ -87,6 +87,13 @@ export function buildSchema(modeKey, seed) {
     }
   }
 
+  // 강조 박스(callout): 허용된 mode에서만, 한 줄을 혼자 차지하는 섹션 하나에만
+  let callout = null;
+  if (mode.calloutable && rand() < mode.calloutChance) {
+    const candidates = rows.filter((r) => r.length === 1 && mode.calloutable.includes(r[0])).map((r) => r[0]);
+    if (candidates.length) callout = pick(candidates);
+  }
+
   const schema = {
     id: `${modeKey}-${seed.toString(16)}`,
     mode: modeKey,
@@ -107,6 +114,7 @@ export function buildSchema(modeKey, seed) {
     labelColumn: pick(mode.labelColumn),
     numberedTitles: pick(mode.numberedTitles),
     txSummary: rand() < 0.5,
+    callout,
     rows,
     sections: rows.flat().map((type) => ({ id: type, type, variant: variants[type] })),
   };
@@ -123,6 +131,7 @@ export function validateSchema(schema) {
 const COMPARE_KEYS = [
   'header', 'alignment', 'density', 'dividerStyle', 'iconUsage', 'titleScale',
   'numberWeight', 'assetEmphasis', 'accentStyle', 'heroTone', 'quickMenu', 'labelColumn', 'numberedTitles', 'txSummary',
+  'container', 'callout',
 ];
 
 /** 두 schema가 얼마나 다른지 (다른 속성 수). 순서·줄 구성·섹션 표현은 2점씩 */

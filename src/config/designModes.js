@@ -2,6 +2,11 @@
 // - 각 배열 = generator가 고를 수 있는 선택지 (여기 없는 값은 절대 생성되지 않는다)
 // - rules = 생성된 schema가 반드시 통과해야 하는 핵심 원칙 (통과 못 하면 다시 생성)
 //
+// 2~5단계는 누적이 아니라 "기본안 + 제약 하나"의 독립 실험이다.
+// - 각 mode는 자기 블록만 읽는다. 다른 mode의 선택지·규칙을 상속하거나 합치지 않는다.
+// - 카드 금지는 reducedCards(2단계)에만 있다. 3·4·5단계는 container 선택지에 카드를 포함한다.
+// - final(6단계)만 앞선 실험의 원칙을 골라 조합한다. 이 조합도 상속이 아니라 final 블록에 직접 적는다.
+//
 // 섹션 타입: assetSummary · accountList · transferAction · cardSpend · recentTransactions
 
 export const SECTION_TYPES = ['assetSummary', 'accountList', 'transferAction', 'cardSpend', 'recentTransactions'];
@@ -12,9 +17,10 @@ const rowOf = (s, type) => s.rows.findIndex((r) => r.includes(type));
 const boxedCount = (s) =>
   s.container !== 'none'
     ? s.sections.length
-    : s.sections.filter((x) => ['hero', 'box', 'tiles'].includes(x.variant)).length;
+    : s.sections.filter((x) => ['hero', 'box', 'tiles'].includes(x.variant)).length + (s.callout ? 1 : 0);
 
 export const designModes = {
+  // 1단계: 추가 제약 없음.
   baseline: {
     label: '기본안',
     skin: 'baseline',
@@ -47,6 +53,7 @@ export const designModes = {
     ],
   },
 
+  // 2단계: 카드 관련 제약은 이 단계에만 있다.
   reducedCards: {
     label: '카드 최소화',
     skin: 'reducedCards',
@@ -79,18 +86,20 @@ export const designModes = {
     ],
   },
 
+  // 3단계: 글자 크기·굵기·행간·여백으로 위계. 카드는 금지하지 않는다(필요하면 사용).
   typographyFirst: {
     label: '타이포그래피 중심',
     skin: 'typographyFirst',
     header: ['greeting', 'brand'],
-    container: ['none'],
+    container: ['none', 'card'],
     alignment: ['left', 'center'],
     density: ['comfortable', 'regular'],
     dividerStyle: ['rule', 'hairline'],
-    iconUsage: ['none'],
+    iconUsage: ['none', 'functional'],
     titleScale: ['sm', 'lg'],
     numberWeight: ['light', 'regular'],
     assetEmphasis: ['xl', 'large'],
+    accentStyle: ['text'],
     heroTone: [null],
     quickMenu: [false],
     labelColumn: [false],
@@ -105,17 +114,18 @@ export const designModes = {
       recentTransactions: ['grouped', 'flat'],
     },
     rules: [
-      { label: '장식 아이콘 없음', test: (s) => s.iconUsage === 'none' },
-      { label: '박스·배경색 없음', test: (s) => boxedCount(s) === 0 },
-      { label: '총자산을 글자 크기로 강조', test: (s) => ['xl', 'large'].includes(s.assetEmphasis) },
+      { label: '총자산을 글자 크기로 강조', test: (s) => ['xl', 'large'].includes(s.assetEmphasis) && sec(s, 'assetSummary').variant === 'block' },
+      { label: '색보다 타이포그래피 우선', test: (s) => s.accentStyle === 'text' },
+      { label: '장식 아이콘 없음', test: (s) => s.iconUsage !== 'decorative' },
     ],
   },
 
+  // 4단계: 큰 대표영역(Hero) 제거 + 정보 균형 배치. 카드(타일) 사용 가능.
   distributedFocus: {
     label: '대표영역 분산',
     skin: 'distributedFocus',
     header: ['date', 'brand'],
-    container: ['tile'],
+    container: ['tile', 'none'],
     alignment: ['left'],
     density: ['regular', 'compact'],
     dividerStyle: ['hairline'],
@@ -146,6 +156,7 @@ export const designModes = {
     ],
   },
 
+  // 5단계: 전형적 금융앱 구조 대신 잡지·정보 페이지처럼. 카드는 필요하면 1개까지, 반복 구조는 금지.
   informationFirst: {
     label: '정보 중심 배치',
     skin: 'informationFirst',
@@ -154,7 +165,7 @@ export const designModes = {
     alignment: ['left'],
     density: ['regular', 'compact'],
     dividerStyle: ['rule', 'hairline'],
-    iconUsage: ['none'],
+    iconUsage: ['none', 'functional'],
     titleScale: ['sm', 'md'],
     numberWeight: ['bold', 'regular'],
     assetEmphasis: ['medium', 'small'],
@@ -164,6 +175,9 @@ export const designModes = {
     numberedTitles: [false, true],
     pairable: ['cardSpend', 'transferAction'],
     pairChance: 0.3,
+    // 강조 박스(callout): 정보 하나를 박스로 띄울 수 있다. 최대 1개라 카드 반복이 되지 않는다.
+    calloutable: ['cardSpend', 'transferAction', 'accountList'],
+    calloutChance: 0.5,
     sections: {
       assetSummary: ['inline', 'strip'],
       accountList: ['table', 'rows'],
@@ -172,12 +186,19 @@ export const designModes = {
       recentTransactions: ['ledger', 'grouped'],
     },
     rules: [
-      { label: '카드 컨테이너 없음', test: (s) => boxedCount(s) === 0 },
-      { label: '선 기반 구분', test: (s) => ['rule', 'hairline'].includes(s.dividerStyle) },
-      { label: '장식 아이콘 없음', test: (s) => s.iconUsage === 'none' },
+      { label: '카드 반복 구조 없음 (박스 최대 1개)', test: (s) => boxedCount(s) <= 1 },
+      {
+        label: '전형적 금융앱 구조 탈피',
+        test: (s) =>
+          sec(s, 'assetSummary').variant !== 'hero' &&
+          (s.labelColumn || sec(s, 'accountList').variant === 'table' || sec(s, 'recentTransactions').variant === 'ledger'),
+      },
+      { label: '선·여백 기반 구분', test: (s) => ['rule', 'hairline'].includes(s.dividerStyle) },
+      { label: '장식 아이콘 없음', test: (s) => s.iconUsage !== 'decorative' },
     ],
   },
 
+  // 6단계: 2~5단계에서 효과가 좋았던 원칙을 골라 직접 조합 (상속 아님).
   final: {
     label: '최종안',
     skin: 'final',

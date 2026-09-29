@@ -623,9 +623,12 @@ function Row({ sections, schema, first }) {
   // hero는 스스로 카드이므로 한 번 더 감싸지 않는다
   const selfBoxed = s.variant === 'hero';
   const labeled = schema.labelColumn && s.type !== 'assetSummary';
+  const callout = !boxed && schema.callout === s.type;
   return (
     <div className={`g-row${first ? ' first' : ' sep'}`}>
-      <div className={`g-inner${boxed && !selfBoxed ? ' g-box' : ''}${labeled ? ' g-labeled' : ''}`}>
+      <div
+        className={`g-inner${boxed && !selfBoxed ? ' g-box' : ''}${labeled ? ' g-labeled' : ''}${callout ? ' g-callout' : ''}`}
+      >
         {labeled ? (
           <>
             <div className="g-col-label">

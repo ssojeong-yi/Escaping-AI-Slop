@@ -32,6 +32,9 @@
   --line: #E4E1DA; --strong: #111; --accent: #111; --accent-soft: #EFEDE8; --pad: 24px;
   --tab-idle: #9A958B; --mid: #77736B; --soft: #C9C4BA;
 }
+/* 타이포그래피 중심에서 카드를 고른 경우: 색 대신 얇은 윤곽만 */
+.skin-typographyFirst.c-card { --surface: #fff; --radius: 14px; --shadow: 0 0 0 1px #E8E4DC; }
+.skin-typographyFirst.c-card .g-box { padding: 20px; }
 .skin-distributedFocus {
   --bg: #F1F2F4; --surface: #fff; --ink: #15181D; --sub: #6B7280; --faint: #8A9099;
   --line: #F1F2F4; --strong: #15181D; --accent: #2457E6; --accent-soft: #EBF0FD;
@@ -94,6 +97,11 @@
 .c-none.dv-band .g-row.sep { padding-top: var(--gap); border-top: 8px solid var(--band); }
 .c-none.dv-space .g-row.sep { margin-top: calc(var(--gap) * 1.5); }
 .c-none .g-row.sep { margin-top: var(--gap); }
+
+/* 강조 박스(callout): 정보 중심 배치에서 최대 1개 */
+.g-callout { padding: 16px; border: 1px solid #E2E2DC; border-radius: 10px; background: #F1F1ED; }
+.c-none .g-row.sep > .g-inner.g-callout { padding-top: 16px; border-top: 0; }
+.g-callout .g-row-item, .g-callout .g-tr, .g-callout .g-cat { border-color: #E4E4E0; }
 
 .g-pair .g-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .c-none .g-pair .g-inner { gap: 0; }
